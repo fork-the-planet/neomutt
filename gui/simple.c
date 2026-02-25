@@ -137,7 +137,7 @@ struct SimpleDialogWindows simple_dialog_new(const struct MenuDefinition *md,
   struct MuttWindow *dlg = mutt_window_new(wtype, MUTT_WIN_ORIENT_VERTICAL,
                                            MUTT_WIN_SIZE_MAXIMISE, MUTT_WIN_SIZE_UNLIMITED,
                                            MUTT_WIN_SIZE_UNLIMITED);
-  dlg->help_menu = md->id;
+  dlg->help_md = md;
   dlg->help_data = help_data;
 
   struct MuttWindow *win_menu = menu_window_new(md->id, NeoMutt->sub);

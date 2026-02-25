@@ -383,7 +383,7 @@ static struct MuttWindow *compose_dlg_init(struct ConfigSubset *sub,
   shared->win_attach_bar = win_abar;
 
   dlg->help_data = ComposeHelp;
-  dlg->help_menu = MENU_COMPOSE;
+  dlg->help_md = MdCompose;
 
   return dlg;
 }
@@ -420,7 +420,7 @@ int dlg_compose(struct Email *e, struct Buffer *fcc, uint8_t flags, struct Confi
     dlg->help_data = ComposeNewsHelp;
   else
     dlg->help_data = ComposeHelp;
-  dlg->help_menu = MENU_COMPOSE;
+  dlg->help_md = MdCompose;
 
   struct Menu *menu = shared->adata->menu;
   update_menu(shared->adata->actx, menu, true);

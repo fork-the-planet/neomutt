@@ -1115,7 +1115,7 @@ struct Mailbox *dlg_index(struct MuttWindow *dlg, struct Mailbox *m_init)
     dlg->help_data = IndexNewsHelp;
   else
     dlg->help_data = IndexHelp;
-  dlg->help_menu = MENU_INDEX;
+  dlg->help_md = MdIndex;
 
   priv->menu = priv->win_index->wdata;
   priv->menu->make_entry = index_make_entry;

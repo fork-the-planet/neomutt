@@ -157,18 +157,14 @@ enum CommandResult km_bind(struct MenuDefinition *md, const char *key_str,
 
 /**
  * km_find_func - Find a function's mapping in a Menu
- * @param mtype Menu type, e.g. #MENU_PAGER
+ * @param md    Menu Definition
  * @param func  Function, e.g. OP_DELETE
  * @retval ptr Keymap for the function
  */
-struct Keymap *km_find_func(enum MenuType mtype, int func)
+struct Keymap *km_find_func(const struct MenuDefinition *md, int func)
 {
-  struct MenuDefinition *md = NULL;
-  ARRAY_FOREACH(md, &MenuDefs)
-  {
-    if (md->id == mtype)
-      break;
-  }
+  if (!md)
+    return NULL;
 
   struct SubMenu **smp = NULL;
 

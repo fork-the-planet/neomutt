@@ -120,27 +120,27 @@ typedef uint8_t WindowActionFlags; ///< Flags for Actions waiting to be performe
  */
 struct MuttWindow
 {
-  short req_cols;                    ///< Number of columns required
-  short req_rows;                    ///< Number of rows required
+  short req_cols;                        ///< Number of columns required
+  short req_rows;                        ///< Number of rows required
 
-  struct WindowState state;          ///< Current state of the Window
-  struct WindowState old;            ///< Previous state of the Window
+  struct WindowState state;              ///< Current state of the Window
+  struct WindowState old;                ///< Previous state of the Window
 
-  enum MuttWindowOrientation orient; ///< Which direction the Window will expand
-  enum MuttWindowSize size;          ///< Type of Window, e.g. #MUTT_WIN_SIZE_FIXED
-  WindowActionFlags actions;         ///< Actions to be performed, e.g. #WA_RECALC
+  enum MuttWindowOrientation orient;     ///< Which direction the Window will expand
+  enum MuttWindowSize size;              ///< Type of Window, e.g. #MUTT_WIN_SIZE_FIXED
+  WindowActionFlags actions;             ///< Actions to be performed, e.g. #WA_RECALC
 
-  struct MuttWindow *parent;         ///< Parent Window
-  struct MuttWindowArray children;   ///< Children Windows
+  struct MuttWindow *parent;             ///< Parent Window
+  struct MuttWindowArray children;       ///< Children Windows
 
-  struct Notify *notify;             ///< Notifications: #NotifyWindow, #EventWindow
+  struct Notify *notify;                 ///< Notifications: #NotifyWindow, #EventWindow
 
-  struct MuttWindow *focus;          ///< Focused Window
-  int help_menu;                     ///< Menu for key bindings, e.g. #MENU_PAGER
-  const struct Mapping *help_data;   ///< Data for the Help Bar
+  struct MuttWindow *focus;              ///< Focused Window
+  const struct MenuDefinition *help_md;  ///< Menu Definition for key bindings
+  const struct Mapping *help_data;       ///< Data for the Help Bar
 
-  enum WindowType type;              ///< Window type, e.g. #WT_SIDEBAR
-  void *wdata;                       ///< Private data
+  enum WindowType type;                  ///< Window type, e.g. #WT_SIDEBAR
+  void *wdata;                           ///< Private data
 
   /**
    * @defgroup window_wdata_free wdata_free()

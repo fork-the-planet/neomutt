@@ -52,7 +52,6 @@
 #include "expando/lib.h"
 #include "index/lib.h"
 #include "key/lib.h"
-#include "menu/lib.h"
 #include "pattern/lib.h"
 #include "sidebar/lib.h"
 #include "display.h"
@@ -314,7 +313,7 @@ int dlg_pager(struct PagerView *pview)
   }
   //---------- setup help menu ------------------------------------------------
   pview->win_pager->help_data = pager_resolve_help_mapping(pview->mode, mailbox_type);
-  pview->win_pager->help_menu = MENU_PAGER;
+  pview->win_pager->help_md = MdPager;
 
   //---------- initialize redraw pdata  -----------------------------------------
   pview->win_pager->size = MUTT_WIN_SIZE_MAXIMISE;

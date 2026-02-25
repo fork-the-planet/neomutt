@@ -293,6 +293,26 @@ struct MenuDefinition *menu_find(int menu)
 }
 
 /**
+ * menu_find_by_name - Find a Menu Definition by its name
+ * @param name Menu name, e.g. "index"
+ * @retval ptr Menu Definition
+ */
+struct MenuDefinition *menu_find_by_name(const char *name)
+{
+  if (!name)
+    return NULL;
+
+  struct MenuDefinition *md = NULL;
+  ARRAY_FOREACH(md, &MenuDefs)
+  {
+    if (mutt_str_equal(md->name, name))
+      return md;
+  }
+
+  return NULL;
+}
+
+/**
  * is_bound - Does a function have a keybinding?
  * @param md Menu Definition
  * @param op Operation, e.g. OP_DELETE

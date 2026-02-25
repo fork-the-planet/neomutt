@@ -101,5 +101,6 @@ const char *           km_get_menu_name   (int mtype);
 int                    km_get_op          (const char *func);
 int                    km_get_op_menu     (int mtype, const char *func);
 struct MenuDefinition *menu_find          (int menu);
+struct MenuDefinition *menu_find_by_name  (const char *name);
 
 #endif /* MUTT_KEY_MENU_H */

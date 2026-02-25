@@ -63,7 +63,7 @@ enum CommandResult parse_dump(const struct Command *cmd, struct Buffer *line,
   struct Buffer *err = pe->message;
 
   struct Buffer *token = buf_pool_get();
-  int mtype = MENU_MAX;
+  const struct MenuDefinition *md = NULL;
   enum CommandResult rc = MUTT_CMD_ERROR;
 
   if (MoreArgs(line))
@@ -79,8 +79,8 @@ enum CommandResult parse_dump(const struct Command *cmd, struct Buffer *line,
 
     if (!mutt_str_equal(buf_string(token), "all"))
     {
-      mtype = km_get_menu_id(buf_string(token));
-      if (mtype == -1)
+      md = menu_find_by_name(buf_string(token));
+      if (!md)
       {
         // L10N: '%s' is the (misspelled) name of the menu, e.g. 'index' or 'pager'
         buf_printf(err, _("%s: no such menu"), buf_string(token));
@@ -89,7 +89,7 @@ enum CommandResult parse_dump(const struct Command *cmd, struct Buffer *line,
     }
   }
 
-  dump_bind_macro(cmd, mtype, token, err);
+  dump_bind_macro(cmd, md ? md->id : MENU_MAX, token, err);
   rc = MUTT_CMD_SUCCESS;
 
 done:

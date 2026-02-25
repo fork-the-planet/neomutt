@@ -277,7 +277,7 @@ void dlg_autocrypt(void)
     menu_tagging_dispatcher(menu->win, &event);
     window_redraw(NULL);
 
-    event = km_dokey(MENU_AUTOCRYPT, GETCH_NO_FLAGS);
+    event = km_dokey(MdAutocrypt, GETCH_NO_FLAGS);
     op = event.op;
     mutt_debug(LL_DEBUG1, "Got op %s (%d)\n", opcodes_get_name(op), op);
     if (op < 0)

@@ -244,7 +244,7 @@ struct Email *dlg_postponed(struct Mailbox *m)
     menu_tagging_dispatcher(menu->win, &event);
     window_redraw(NULL);
 
-    event = km_dokey(MENU_POSTPONED, GETCH_NO_FLAGS);
+    event = km_dokey(MdPostpone, GETCH_NO_FLAGS);
     op = event.op;
     mutt_debug(LL_DEBUG1, "Got op %s (%d)\n", opcodes_get_name(op), op);
     if (op < 0)

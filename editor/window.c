@@ -325,7 +325,7 @@ int mw_get_field(const char *prompt, struct Buffer *buf, CompletionFlags complet
         win->actions |= WA_REPAINT;
 
       window_redraw(NULL);
-      struct KeyEvent event = km_dokey(MENU_EDITOR, flags);
+      struct KeyEvent event = km_dokey(MdEditor, flags);
       if ((event.op == OP_TIMEOUT) || (event.op == OP_REPAINT))
       {
         continue;

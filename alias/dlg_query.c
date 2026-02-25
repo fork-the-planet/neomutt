@@ -371,7 +371,7 @@ static bool dlg_query(struct Buffer *buf, struct AliasMenuData *mdata)
     menu_tagging_dispatcher(menu->win, &event);
     window_redraw(NULL);
 
-    event = km_dokey(MENU_QUERY, GETCH_NO_FLAGS);
+    event = km_dokey(MdQuery, GETCH_NO_FLAGS);
     op = event.op;
     mutt_debug(LL_DEBUG1, "Got op %s (%d)\n", opcodes_get_name(op), op);
     if (op < 0)

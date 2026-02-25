@@ -1085,7 +1085,7 @@ void dlg_browser(struct Buffer *file, SelectFileFlags flags, struct Mailbox *m,
     menu_tagging_dispatcher(priv->menu->win, &event);
     window_redraw(NULL);
 
-    event = km_dokey(MENU_BROWSER, GETCH_NO_FLAGS);
+    event = km_dokey(MdBrowser, GETCH_NO_FLAGS);
     op = event.op;
     mutt_debug(LL_DEBUG1, "Got op %s (%d)\n", opcodes_get_name(op), op);
     if (op < 0)

@@ -424,22 +424,18 @@ KeyGatherFlags gather_functions(const struct MenuDefinition *md, const keycode_t
 
 /**
  * km_dokey - Determine what a keypress should do
- * @param mtype Menu type, e.g. #MENU_EDITOR
+ * @param md    Menu Definition
  * @param flags Flags, e.g. #GETCH_IGNORE_MACRO
  * @retval ptr Event
  */
-struct KeyEvent km_dokey(enum MenuType mtype, GetChFlags flags)
+struct KeyEvent km_dokey(const struct MenuDefinition *md, GetChFlags flags)
 {
   struct KeyEvent event = { 0, OP_NULL };
   int pos = 0;
-  const struct MenuDefinition *md = NULL;
   keycode_t keys[MAX_SEQ] = { 0 };
 
-  ARRAY_FOREACH(md, &MenuDefs)
-  {
-    if (md->id == mtype)
-      break;
-  }
+  if (!md)
+    return event;
 
   for (int n = 0; n < MaxKeyLoop; n++)
   {

@@ -291,22 +291,24 @@ int print_bind(enum MenuType menu, FILE *fp)
 
 /**
  * colon_bind - Dump the key bindings
- * @param menu Menu type
- * @param fp   File to write to
+ * @param md Menu Definition, NULL for all Menus
+ * @param fp File to write to
  */
-void colon_bind(enum MenuType menu, FILE *fp)
+void colon_bind(const struct MenuDefinition *md, FILE *fp)
 {
-  if (menu == MENU_MAX)
+  if (md)
   {
-    for (enum MenuType i = 1; i < MENU_MAX; i++)
-    {
-      if (print_bind(i, fp) > 0)
-        fprintf(fp, "\n");
-    }
+    print_bind(md->id, fp);
   }
   else
   {
-    print_bind(menu, fp);
+    ARRAY_FOREACH(md, &MenuDefs)
+    {
+      if (print_bind(md->id, fp) > 0)
+      {
+        fprintf(fp, "\n");
+      }
+    }
   }
 }
 
@@ -360,24 +362,24 @@ int print_macro(enum MenuType menu, FILE *fp)
 
 /**
  * colon_macro - Dump the macros
- * @param menu Menu type
- * @param fp   File to write to
+ * @param md Menu Definition, NULL for all Menus
+ * @param fp File to write to
  */
-void colon_macro(enum MenuType menu, FILE *fp)
+void colon_macro(const struct MenuDefinition *md, FILE *fp)
 {
-  if (menu == MENU_MAX)
+  if (md)
   {
-    for (enum MenuType i = 1; i < MENU_MAX; i++)
+    print_macro(md->id, fp);
+  }
+  else
+  {
+    ARRAY_FOREACH(md, &MenuDefs)
     {
-      if (print_macro(i, fp) > 0)
+      if (print_macro(md->id, fp) > 0)
       {
         fprintf(fp, "\n");
       }
     }
-  }
-  else
-  {
-    print_macro(menu, fp);
   }
 }
 
@@ -404,9 +406,9 @@ void dump_bind_macro(const struct Command *cmd, const struct MenuDefinition *md,
   }
 
   if (cmd->id == CMD_BIND)
-    colon_bind(md ? md->id : MENU_MAX, fp);
+    colon_bind(md, fp);
   else
-    colon_macro(md ? md->id : MENU_MAX, fp);
+    colon_macro(md, fp);
 
   if (ftello(fp) == 0)
   {

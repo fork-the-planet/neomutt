@@ -260,7 +260,7 @@ void dlg_attachment(struct ConfigSubset *sub, struct MailboxView *mv,
       continue;
     if (op == OP_NULL)
     {
-      km_error_key(MENU_ATTACHMENT);
+      km_error_key(MdAttach);
       continue;
     }
     mutt_clear_error();

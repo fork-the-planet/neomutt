@@ -149,7 +149,7 @@ void dlg_history(struct Buffer *buf, struct StringArray *matches)
       continue;
     if (op == OP_NULL)
     {
-      km_error_key(MENU_GENERIC);
+      km_error_key(MdGeneric);
       continue;
     }
     mutt_clear_error();

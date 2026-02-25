@@ -284,7 +284,7 @@ void dlg_autocrypt(void)
       continue;
     if (op == OP_NULL)
     {
-      km_error_key(MENU_AUTOCRYPT);
+      km_error_key(MdAutocrypt);
       continue;
     }
     mutt_clear_error();

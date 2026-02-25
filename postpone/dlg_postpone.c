@@ -251,7 +251,7 @@ struct Email *dlg_postponed(struct Mailbox *m)
       continue;
     if (op == OP_NULL)
     {
-      km_error_key(MENU_POSTPONED);
+      km_error_key(MdPostpone);
       continue;
     }
     mutt_clear_error();

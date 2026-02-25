@@ -305,7 +305,7 @@ static bool dlg_alias(struct AliasMenuData *mdata)
       continue;
     if (op == OP_NULL)
     {
-      km_error_key(MENU_ALIAS);
+      km_error_key(MdAlias);
       continue;
     }
     mutt_clear_error();

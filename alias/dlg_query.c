@@ -378,7 +378,7 @@ static bool dlg_query(struct Buffer *buf, struct AliasMenuData *mdata)
       continue;
     if (op == OP_NULL)
     {
-      km_error_key(MENU_QUERY);
+      km_error_key(MdQuery);
       continue;
     }
     mutt_clear_error();

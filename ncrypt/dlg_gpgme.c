@@ -293,7 +293,7 @@ struct CryptKeyInfo *dlg_gpgme(struct CryptKeyInfo *keys, struct Address *p,
       continue;
     if (op == OP_NULL)
     {
-      km_error_key(menu_to_use);
+      km_error_key(md);
       continue;
     }
     mutt_clear_error();

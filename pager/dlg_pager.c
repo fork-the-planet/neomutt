@@ -509,7 +509,7 @@ int dlg_pager(struct PagerView *pview)
 
     if (op == OP_NULL)
     {
-      km_error_key(MENU_PAGER);
+      km_error_key(MdPager);
       continue;
     }
 

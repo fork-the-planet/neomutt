@@ -1382,7 +1382,7 @@ struct Mailbox *dlg_index(struct MuttWindow *dlg, struct Mailbox *m_init)
       rc = global_function_dispatcher(priv->menu->win, &event);
 
     if (rc == FR_UNKNOWN)
-      km_error_key(MENU_INDEX);
+      km_error_key(MdIndex);
 
 #ifdef USE_NOTMUCH
     nm_db_debug_check(shared->mailbox);

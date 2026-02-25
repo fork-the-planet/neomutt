@@ -1092,7 +1092,7 @@ void dlg_browser(struct Buffer *file, SelectFileFlags flags, struct Mailbox *m,
       continue;
     if (op == OP_NULL)
     {
-      km_error_key(MENU_BROWSER);
+      km_error_key(MdBrowser);
       continue;
     }
     mutt_clear_error();

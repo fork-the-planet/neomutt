@@ -280,11 +280,14 @@ struct KeyEvent mutt_getch(GetChFlags flags)
 
 /**
  * km_error_key - Handle an unbound key sequence
- * @param mtype Menu type, e.g. #MENU_PAGER
+ * @param md Menu Definition
  */
-void km_error_key(enum MenuType mtype)
+void km_error_key(const struct MenuDefinition *md)
 {
-  struct Keymap *key = km_find_func(mtype, OP_HELP);
+  if (!md)
+    return;
+
+  struct Keymap *key = km_find_func(md->id, OP_HELP);
   if (!key)
   {
     mutt_error(_("Key is not bound"));

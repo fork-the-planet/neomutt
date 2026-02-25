@@ -448,7 +448,7 @@ int dlg_compose(struct Email *e, struct Buffer *fcc, uint8_t flags, struct Confi
       continue;
     if (op == OP_NULL)
     {
-      km_error_key(MENU_COMPOSE);
+      km_error_key(MdCompose);
       continue;
     }
     mutt_clear_error();

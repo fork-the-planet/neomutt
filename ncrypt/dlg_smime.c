@@ -233,7 +233,7 @@ struct SmimeKey *dlg_smime(struct SmimeKey *keys, const char *query)
       continue;
     if (op == OP_NULL)
     {
-      km_error_key(MENU_SMIME);
+      km_error_key(MdSmime);
       continue;
     }
     mutt_clear_error();

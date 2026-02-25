@@ -75,7 +75,7 @@ void             array_to_endcond            (struct KeyEventArray *a);
 KeyGatherFlags   gather_functions            (const struct MenuDefinition *md, const keycode_t *keys, int key_len, struct KeymapMatchArray *kma);
 void             generic_tokenize_push_string(char *s);
 struct KeyEvent  km_dokey                    (const struct MenuDefinition *md, GetChFlags flags);
-void             km_error_key                (enum MenuType mtype);
+void             km_error_key                (const struct MenuDefinition *md);
 void             mutt_flushinp               (void);
 void             mutt_flush_macro_to_endcond (void);
 struct KeyEvent  mutt_getch                  (GetChFlags flags);

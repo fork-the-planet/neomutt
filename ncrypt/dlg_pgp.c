@@ -263,7 +263,7 @@ struct PgpKeyInfo *dlg_pgp(struct PgpKeyInfo *keys, struct Address *p, const cha
       continue;
     if (op == OP_NULL)
     {
-      km_error_key(MENU_PGP);
+      km_error_key(MdPgp);
       continue;
     }
     mutt_clear_error();

@@ -46,6 +46,209 @@
 #include "menu.h"
 
 /**
+ * escape_macro - Escape any special characters in a macro
+ * @param[in]  macro Macro string
+ * @param[out] buf   Buffer for the result
+ *
+ * Replace characters, such as `<Enter>` with the literal "\n"
+ */
+void escape_macro(const char *macro, struct Buffer *buf)
+{
+  wchar_t wc = 0;
+  size_t k;
+  size_t len = mutt_str_len(macro);
+  mbstate_t mbstate1 = { 0 };
+  mbstate_t mbstate2 = { 0 };
+
+  for (; (len > 0) && (k = mbrtowc(&wc, macro, MB_LEN_MAX, &mbstate1)); macro += k, len -= k)
+  {
+    if ((k == ICONV_ILLEGAL_SEQ) || (k == ICONV_BUF_TOO_SMALL))
+    {
+      if (k == ICONV_ILLEGAL_SEQ)
+        memset(&mbstate1, 0, sizeof(mbstate1));
+      k = (k == ICONV_ILLEGAL_SEQ) ? 1 : len;
+      wc = ReplacementChar;
+    }
+
+    const int w = wcwidth(wc);
+    if (IsWPrint(wc) && (w >= 0))
+    {
+      char tmp[MB_LEN_MAX * 2] = { 0 };
+      if (wcrtomb(tmp, wc, &mbstate2) != ICONV_ILLEGAL_SEQ)
+      {
+        buf_addstr(buf, tmp);
+      }
+    }
+    else if ((wc < 0x20) || (wc == 0x7f))
+    {
+      if (wc == '\033') // Escape
+        buf_addstr(buf, "\\e");
+      else if (wc == '\n')
+        buf_addstr(buf, "\\n");
+      else if (wc == '\r')
+        buf_addstr(buf, "\\r");
+      else if (wc == '\t')
+        buf_addstr(buf, "\\t");
+      else
+        buf_add_printf(buf, "^%c", (char) ((wc + '@') & 0x7f));
+    }
+    else
+    {
+      buf_addch(buf, '?');
+    }
+  }
+}
+
+/**
+ * help_lookup_function - Find a keybinding for an operation
+ * @param md   Menu Definition
+ * @param op   Operation, e.g. OP_DELETE
+ * @retval str  Key binding
+ * @retval NULL No key binding found
+ */
+const char *help_lookup_function(const struct MenuDefinition *md, int op)
+{
+  struct SubMenu **smp = NULL;
+
+  ARRAY_FOREACH(smp, &md->submenus)
+  {
+    struct SubMenu *sm = *smp;
+
+    for (int i = 0; sm->functions[i].name; i++)
+    {
+      const struct MenuFuncOp *mfo = &sm->functions[i];
+      if (mfo->op == op)
+        return mfo->name;
+    }
+  }
+
+  return "UNKNOWN";
+}
+
+/**
+ * gather_menu - Gather info about one menu
+ * @param[in]  menu      Menu type
+ * @param[out] bia_bind  Array for bind  results (may be NULL)
+ * @param[out] bia_macro Array for macro results (may be NULL)
+ * @param[in]  one_submenu Only parse the first SubMenu
+ */
+void gather_menu(enum MenuType menu, struct BindingInfoArray *bia_bind,
+                 struct BindingInfoArray *bia_macro, bool one_submenu)
+{
+  struct Buffer *key_binding = buf_pool_get();
+  struct Buffer *macro = buf_pool_get();
+
+  struct MenuDefinition *md = NULL;
+  ARRAY_FOREACH(md, &MenuDefs)
+  {
+    if (md->id == menu)
+      break;
+  }
+
+  struct SubMenu **smp = NULL;
+
+  ARRAY_FOREACH(smp, &md->submenus)
+  {
+    struct SubMenu *sm = *smp;
+    const char *name = sm->parent->name;
+
+    struct BindingInfo bi_label = { ARRAY_FOREACH_IDX_smp, { NULL, NULL, name } };
+
+    if (bia_bind)
+      ARRAY_ADD(bia_bind, bi_label);
+    if (bia_macro)
+      ARRAY_ADD(bia_macro, bi_label);
+
+    struct Keymap *map = NULL;
+    STAILQ_FOREACH(map, &sm->keymaps, entries)
+    {
+      struct BindingInfo bi = { ARRAY_FOREACH_IDX_smp, { NULL, NULL, NULL } };
+
+      buf_reset(key_binding);
+      keymap_expand_key(map, key_binding);
+
+      if (map->op == OP_MACRO)
+      {
+        if (!bia_macro || (map->op == OP_NULL))
+          continue;
+
+        buf_reset(macro);
+        escape_macro(map->macro, macro);
+        bi.a[0] = buf_strdup(key_binding);
+        bi.a[1] = buf_strdup(macro);
+        bi.a[2] = map->desc;
+        ARRAY_ADD(bia_macro, bi);
+      }
+      else
+      {
+        if (!bia_bind)
+          continue;
+
+        if (map->op == OP_NULL)
+        {
+          bi.a[0] = buf_strdup(key_binding);
+          bi.a[1] = "noop";
+          ARRAY_ADD(bia_bind, bi);
+          continue;
+        }
+
+        bi.a[0] = buf_strdup(key_binding);
+        bi.a[1] = help_lookup_function(md, map->op);
+        bi.a[2] = _(opcodes_get_description(map->op));
+        ARRAY_ADD(bia_bind, bi);
+      }
+    }
+
+    if (one_submenu)
+      break;
+  }
+
+  buf_pool_release(&key_binding);
+  buf_pool_release(&macro);
+}
+
+/**
+ * binding_sort - Compare two BindingInfo by their keybinding - Implements ::sort_t - @ingroup sort_api
+ */
+int binding_sort(const void *a, const void *b, void *sdata)
+{
+  const struct BindingInfo *x = (const struct BindingInfo *) a;
+  const struct BindingInfo *y = (const struct BindingInfo *) b;
+
+  // Sort by SubMenu
+  if (x->order != y->order)
+    return mutt_numeric_cmp(x->order, y->order);
+
+  // Sort by Keybinding
+  int rc = mutt_str_cmp(x->a[0], y->a[0]);
+  if (rc != 0)
+    return rc;
+
+  // No binding, sort by function instead
+  return mutt_str_cmp(x->a[1], y->a[1]);
+}
+
+/**
+ * measure_column - Measure one column of a table
+ * @param bia Array of binding info
+ * @param col Column to measure
+ * @retval num Width of widest column
+ */
+int measure_column(struct BindingInfoArray *bia, int col)
+{
+  int max_width = 0;
+
+  struct BindingInfo *bi = NULL;
+  ARRAY_FOREACH(bi, bia)
+  {
+    const int col_width = mutt_strwidth(bi->a[col]);
+    max_width = MAX(max_width, col_width);
+  }
+
+  return max_width;
+}
+
+/**
  * print_bind - Display the bindings for one menu
  * @param menu Menu type
  * @param fp   File to write to
@@ -229,209 +432,6 @@ void dump_bind_macro(const struct Command *cmd, int mtype, struct Buffer *buf,
 done:
   mutt_file_fclose(&fp);
   buf_pool_release(&tempfile);
-}
-
-/**
- * binding_sort - Compare two BindingInfo by their keybinding - Implements ::sort_t - @ingroup sort_api
- */
-int binding_sort(const void *a, const void *b, void *sdata)
-{
-  const struct BindingInfo *x = (const struct BindingInfo *) a;
-  const struct BindingInfo *y = (const struct BindingInfo *) b;
-
-  // Sort by SubMenu
-  if (x->order != y->order)
-    return mutt_numeric_cmp(x->order, y->order);
-
-  // Sort by Keybinding
-  int rc = mutt_str_cmp(x->a[0], y->a[0]);
-  if (rc != 0)
-    return rc;
-
-  // No binding, sort by function instead
-  return mutt_str_cmp(x->a[1], y->a[1]);
-}
-
-/**
- * escape_macro - Escape any special characters in a macro
- * @param[in]  macro Macro string
- * @param[out] buf   Buffer for the result
- *
- * Replace characters, such as `<Enter>` with the literal "\n"
- */
-void escape_macro(const char *macro, struct Buffer *buf)
-{
-  wchar_t wc = 0;
-  size_t k;
-  size_t len = mutt_str_len(macro);
-  mbstate_t mbstate1 = { 0 };
-  mbstate_t mbstate2 = { 0 };
-
-  for (; (len > 0) && (k = mbrtowc(&wc, macro, MB_LEN_MAX, &mbstate1)); macro += k, len -= k)
-  {
-    if ((k == ICONV_ILLEGAL_SEQ) || (k == ICONV_BUF_TOO_SMALL))
-    {
-      if (k == ICONV_ILLEGAL_SEQ)
-        memset(&mbstate1, 0, sizeof(mbstate1));
-      k = (k == ICONV_ILLEGAL_SEQ) ? 1 : len;
-      wc = ReplacementChar;
-    }
-
-    const int w = wcwidth(wc);
-    if (IsWPrint(wc) && (w >= 0))
-    {
-      char tmp[MB_LEN_MAX * 2] = { 0 };
-      if (wcrtomb(tmp, wc, &mbstate2) != ICONV_ILLEGAL_SEQ)
-      {
-        buf_addstr(buf, tmp);
-      }
-    }
-    else if ((wc < 0x20) || (wc == 0x7f))
-    {
-      if (wc == '\033') // Escape
-        buf_addstr(buf, "\\e");
-      else if (wc == '\n')
-        buf_addstr(buf, "\\n");
-      else if (wc == '\r')
-        buf_addstr(buf, "\\r");
-      else if (wc == '\t')
-        buf_addstr(buf, "\\t");
-      else
-        buf_add_printf(buf, "^%c", (char) ((wc + '@') & 0x7f));
-    }
-    else
-    {
-      buf_addch(buf, '?');
-    }
-  }
-}
-
-/**
- * help_lookup_function - Find a keybinding for an operation
- * @param md   Menu Definition
- * @param op   Operation, e.g. OP_DELETE
- * @retval str  Key binding
- * @retval NULL No key binding found
- */
-const char *help_lookup_function(const struct MenuDefinition *md, int op)
-{
-  struct SubMenu **smp = NULL;
-
-  ARRAY_FOREACH(smp, &md->submenus)
-  {
-    struct SubMenu *sm = *smp;
-
-    for (int i = 0; sm->functions[i].name; i++)
-    {
-      const struct MenuFuncOp *mfo = &sm->functions[i];
-      if (mfo->op == op)
-        return mfo->name;
-    }
-  }
-
-  return "UNKNOWN";
-}
-
-/**
- * gather_menu - Gather info about one menu
- * @param[in]  menu      Menu type
- * @param[out] bia_bind  Array for bind  results (may be NULL)
- * @param[out] bia_macro Array for macro results (may be NULL)
- * @param[in]  one_submenu Only parse the first SubMenu
- */
-void gather_menu(enum MenuType menu, struct BindingInfoArray *bia_bind,
-                 struct BindingInfoArray *bia_macro, bool one_submenu)
-{
-  struct Buffer *key_binding = buf_pool_get();
-  struct Buffer *macro = buf_pool_get();
-
-  struct MenuDefinition *md = NULL;
-  ARRAY_FOREACH(md, &MenuDefs)
-  {
-    if (md->id == menu)
-      break;
-  }
-
-  struct SubMenu **smp = NULL;
-
-  ARRAY_FOREACH(smp, &md->submenus)
-  {
-    struct SubMenu *sm = *smp;
-    const char *name = sm->parent->name;
-
-    struct BindingInfo bi_label = { ARRAY_FOREACH_IDX_smp, { NULL, NULL, name } };
-
-    if (bia_bind)
-      ARRAY_ADD(bia_bind, bi_label);
-    if (bia_macro)
-      ARRAY_ADD(bia_macro, bi_label);
-
-    struct Keymap *map = NULL;
-    STAILQ_FOREACH(map, &sm->keymaps, entries)
-    {
-      struct BindingInfo bi = { ARRAY_FOREACH_IDX_smp, { NULL, NULL, NULL } };
-
-      buf_reset(key_binding);
-      keymap_expand_key(map, key_binding);
-
-      if (map->op == OP_MACRO)
-      {
-        if (!bia_macro || (map->op == OP_NULL))
-          continue;
-
-        buf_reset(macro);
-        escape_macro(map->macro, macro);
-        bi.a[0] = buf_strdup(key_binding);
-        bi.a[1] = buf_strdup(macro);
-        bi.a[2] = map->desc;
-        ARRAY_ADD(bia_macro, bi);
-      }
-      else
-      {
-        if (!bia_bind)
-          continue;
-
-        if (map->op == OP_NULL)
-        {
-          bi.a[0] = buf_strdup(key_binding);
-          bi.a[1] = "noop";
-          ARRAY_ADD(bia_bind, bi);
-          continue;
-        }
-
-        bi.a[0] = buf_strdup(key_binding);
-        bi.a[1] = help_lookup_function(md, map->op);
-        bi.a[2] = _(opcodes_get_description(map->op));
-        ARRAY_ADD(bia_bind, bi);
-      }
-    }
-
-    if (one_submenu)
-      break;
-  }
-
-  buf_pool_release(&key_binding);
-  buf_pool_release(&macro);
-}
-
-/**
- * measure_column - Measure one column of a table
- * @param bia Array of binding info
- * @param col Column to measure
- * @retval num Width of widest column
- */
-int measure_column(struct BindingInfoArray *bia, int col)
-{
-  int max_width = 0;
-
-  struct BindingInfo *bi = NULL;
-  ARRAY_FOREACH(bi, bia)
-  {
-    const int col_width = mutt_strwidth(bi->a[col]);
-    max_width = MAX(max_width, col_width);
-  }
-
-  return max_width;
 }
 
 /**

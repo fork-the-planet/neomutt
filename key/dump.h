@@ -47,7 +47,7 @@ ARRAY_HEAD(BindingInfoArray, struct BindingInfo);
 int                binding_sort        (const void *a, const void *b, void *sdata);
 void               colon_bind          (enum MenuType menu, FILE *fp);
 void               colon_macro         (enum MenuType menu, FILE *fp);
-void               dump_bind_macro     (const struct Command *cmd, int mtype, struct Buffer *buf, struct Buffer *err);
+void               dump_bind_macro     (const struct Command *cmd, const struct MenuDefinition *md, struct Buffer *buf, struct Buffer *err);
 void               escape_macro        (const char *macro, struct Buffer *buf);
 void               gather_menu         (enum MenuType menu, struct BindingInfoArray *bia_bind, struct BindingInfoArray *bia_macro, bool one_submenu);
 int                gather_unbound      (enum MenuType mtype, struct BindingInfoArray *bia_unbound);

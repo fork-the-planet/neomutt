@@ -384,14 +384,14 @@ void colon_macro(enum MenuType menu, FILE *fp)
 /**
  * dump_bind_macro - Dump a Menu's binds or macros to the Pager
  * @param cmd   Command
- * @param mtype Menu Type
+ * @param md    Menu Definition, NULL for all Menus
  * @param buf   Menu name, e.g. "index"
  * @param err   Buffer for errors
  */
-void dump_bind_macro(const struct Command *cmd, int mtype, struct Buffer *buf,
-                     struct Buffer *err)
+void dump_bind_macro(const struct Command *cmd, const struct MenuDefinition *md,
+                     struct Buffer *buf, struct Buffer *err)
 {
-  bool dump_all = (mtype == MENU_MAX);
+  bool dump_all = (md == NULL);
 
   struct Buffer *tempfile = buf_pool_get();
   buf_mktemp(tempfile);
@@ -404,9 +404,9 @@ void dump_bind_macro(const struct Command *cmd, int mtype, struct Buffer *buf,
   }
 
   if (cmd->id == CMD_BIND)
-    colon_bind(mtype, fp);
+    colon_bind(md ? md->id : MENU_MAX, fp);
   else
-    colon_macro(mtype, fp);
+    colon_macro(md ? md->id : MENU_MAX, fp);
 
   if (ftello(fp) == 0)
   {

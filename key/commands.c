@@ -89,7 +89,7 @@ enum CommandResult parse_dump(const struct Command *cmd, struct Buffer *line,
     }
   }
 
-  dump_bind_macro(cmd, md ? md->id : MENU_MAX, token, err);
+  dump_bind_macro(cmd, md, token, err);
   rc = MUTT_CMD_SUCCESS;
 
 done:

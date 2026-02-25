@@ -42,6 +42,9 @@
 #include "question/lib.h"
 #include "autocrypt_data.h"
 
+/// Autocrypt Menu Definition
+struct MenuDefinition *MdAutocrypt = NULL;
+
 // clang-format off
 /**
  * OpAutocrypt - Functions for the Autocrypt Account
@@ -81,6 +84,8 @@ void autocrypt_init_keys(struct SubMenu *sm_generic)
   km_menu_add_submenu(md, sm);
   km_menu_add_submenu(md, sm_generic);
   km_menu_add_bindings(md, AutocryptDefaultBindings);
+
+  MdAutocrypt = md;
 }
 
 /**

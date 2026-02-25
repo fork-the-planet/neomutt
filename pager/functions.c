@@ -60,6 +60,9 @@ static int op_pager_search_next(struct IndexSharedData *shared,
                                 struct PagerPrivateData *priv,
                                 const struct KeyEvent *event);
 
+/// Pager Menu Definition
+struct MenuDefinition *MdPager = NULL;
+
 // clang-format off
 /**
  * OpPager - Functions for the Pager Menu
@@ -326,6 +329,8 @@ void pager_init_keys(struct SubMenu *sm_generic)
   km_menu_add_submenu(md, sm_pager);
   km_menu_add_submenu(md, sm_sidebar);
   km_menu_add_bindings(md, PagerDefaultBindings);
+
+  MdPager = md;
 }
 
 /**

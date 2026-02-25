@@ -42,6 +42,12 @@
 #include "state.h"
 #include "wdata.h"
 
+/// Editor Menu Definition
+struct MenuDefinition *MdEditor = NULL;
+
+/// Editor functions
+struct SubMenu *SmEditor = NULL;
+
 // clang-format off
 /**
  * OpEditor - Functions for the Editor Menu
@@ -131,6 +137,9 @@ void editor_init_keys(struct SubMenu *sm_generic)
   md = km_register_menu(MENU_EDITOR, "editor");
   km_menu_add_submenu(md, sm);
   km_menu_add_bindings(md, EditorDefaultBindings);
+
+  MdEditor = md;
+  SmEditor = sm;
 }
 
 /**

@@ -76,6 +76,9 @@
 #include <libintl.h>
 #endif
 
+/// Index Menu Definition
+struct MenuDefinition *MdIndex = NULL;
+
 // clang-format off
 /**
  * OpIndex - Functions for the Index Menu
@@ -328,6 +331,8 @@ void index_init_keys(struct SubMenu *sm_generic)
   km_menu_add_submenu(md, sm_sidebar);
   km_menu_add_submenu(md, sm_generic);
   km_menu_add_bindings(md, IndexDefaultBindings);
+
+  MdIndex = md;
 }
 
 /**

@@ -41,8 +41,11 @@
 #include "key/lib.h"
 #include "menu/lib.h"
 
+/// Sidebar Menu Definition
+struct MenuDefinition *MdSidebar = NULL;
+
 /// Sidebar functions
-static struct SubMenu *SmSidebar = NULL;
+struct SubMenu *SmSidebar = NULL;
 
 // clang-format off
 /**
@@ -76,6 +79,7 @@ void sidebar_init_keys(struct SubMenu *sm_generic)
   md = km_register_menu(MENU_SIDEBAR, "sidebar");
   km_menu_add_submenu(md, sm);
 
+  MdSidebar = md;
   SmSidebar = sm;
 }
 

@@ -28,6 +28,8 @@
 struct KeyEvent;
 struct MuttWindow;
 
+extern struct MenuDefinition *MdSmime;
+
 /**
  * struct SmimeData - Data to pass to the Smime Functions
  */

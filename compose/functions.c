@@ -72,6 +72,9 @@
 #include <libintl.h>
 #endif
 
+/// Compose Menu Definition
+struct MenuDefinition *MdCompose = NULL;
+
 // clang-format off
 /**
  * OpCompose - Functions for the Compose Menu
@@ -217,6 +220,8 @@ void compose_init_keys(struct SubMenu *sm_generic)
   km_menu_add_submenu(md, sm);
   km_menu_add_submenu(md, sm_generic);
   km_menu_add_bindings(md, ComposeDefaultBindings);
+
+  MdCompose = md;
 }
 
 /**

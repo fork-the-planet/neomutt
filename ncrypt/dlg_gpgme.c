@@ -220,20 +220,12 @@ struct CryptKeyInfo *dlg_gpgme(struct CryptKeyInfo *keys, struct Address *p,
   gpgme_sort_keys(&ckia);
 
   struct MenuDefinition *md = NULL;
-  enum MenuType menu_to_use = MENU_GENERIC;
-
   if (app & APPLICATION_PGP)
-  {
     md = MdPgp;
-    menu_to_use = MENU_PGP;
-  }
   else if (app & APPLICATION_SMIME)
-  {
     md = MdSmime;
-    menu_to_use = MENU_SMIME;
-  }
 
-  struct SimpleDialogWindows sdw = simple_dialog_new(menu_to_use, WT_DLG_GPGME, GpgmeHelp);
+  struct SimpleDialogWindows sdw = simple_dialog_new(md, WT_DLG_GPGME, GpgmeHelp);
 
   struct Menu *menu = sdw.menu;
   struct GpgmeData gd = { false, menu, &ckia, NULL, forced_valid };

@@ -306,7 +306,7 @@ static int query_window_observer(struct NotifyCallback *nc)
 static struct SimpleDialogWindows query_dialog_new(struct AliasMenuData *mdata,
                                                    const char *query)
 {
-  struct SimpleDialogWindows sdw = simple_dialog_new(MENU_QUERY, WT_DLG_QUERY, QueryHelp);
+  struct SimpleDialogWindows sdw = simple_dialog_new(MdQuery, WT_DLG_QUERY, QueryHelp);
 
   struct Menu *menu = sdw.menu;
 

@@ -165,7 +165,7 @@ static int cert_make_entry(struct Menu *menu, int line, int max_cols, struct Buf
  */
 int dlg_certificate(const char *title, struct StringArray *carr, bool allow_always, bool allow_skip)
 {
-  struct SimpleDialogWindows sdw = simple_dialog_new(MENU_GENERIC, WT_DLG_CERTIFICATE, VerifyHelp);
+  struct SimpleDialogWindows sdw = simple_dialog_new(MdGeneric, WT_DLG_CERTIFICATE, VerifyHelp);
 
   struct CertMenuData mdata = { carr };
 

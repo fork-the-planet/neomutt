@@ -118,7 +118,7 @@ static int history_make_entry(struct Menu *menu, int line, int max_cols, struct 
  */
 void dlg_history(struct Buffer *buf, struct StringArray *matches)
 {
-  struct SimpleDialogWindows sdw = simple_dialog_new(MENU_DIALOG, WT_DLG_HISTORY, HistoryHelp);
+  struct SimpleDialogWindows sdw = simple_dialog_new(MdDialog, WT_DLG_HISTORY, HistoryHelp);
   struct Menu *menu = sdw.menu;
 
   struct HistoryData hd = { false, false, buf, menu, matches };

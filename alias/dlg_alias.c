@@ -231,7 +231,7 @@ static int alias_window_observer(struct NotifyCallback *nc)
  */
 static struct SimpleDialogWindows alias_dialog_new(struct AliasMenuData *mdata)
 {
-  struct SimpleDialogWindows sdw = simple_dialog_new(MENU_ALIAS, WT_DLG_ALIAS, AliasHelp);
+  struct SimpleDialogWindows sdw = simple_dialog_new(MdAlias, WT_DLG_ALIAS, AliasHelp);
 
   struct Menu *menu = sdw.menu;
 

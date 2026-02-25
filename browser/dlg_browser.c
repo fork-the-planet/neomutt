@@ -1038,7 +1038,7 @@ void dlg_browser(struct Buffer *file, SelectFileFlags flags, struct Mailbox *m,
   else
     help_data = FolderHelp;
 
-  struct SimpleDialogWindows sdw = simple_dialog_new(MENU_BROWSER, WT_DLG_BROWSER, help_data);
+  struct SimpleDialogWindows sdw = simple_dialog_new(MdBrowser, WT_DLG_BROWSER, help_data);
 
   struct Menu *menu = sdw.menu;
   menu->make_entry = folder_make_entry;

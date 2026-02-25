@@ -67,6 +67,7 @@
 #include "config/lib.h"
 #include "core/lib.h"
 #include "simple.h"
+#include "key/lib.h"
 #include "menu/lib.h"
 #include "dialog.h"
 #include "mutt_window.h"
@@ -124,21 +125,22 @@ static int simple_window_observer(struct NotifyCallback *nc)
 
 /**
  * simple_dialog_new - Create a simple index Dialog
- * @param mtype     Menu type, e.g. #MENU_ALIAS
+ * @param md        Menu Definition
  * @param wtype     Dialog type, e.g. #WT_DLG_ALIAS
  * @param help_data Data for the Help Bar
  * @retval obj SimpleDialogWindows Tuple containing Dialog, SimpleBar and Menu pointers
  */
-struct SimpleDialogWindows simple_dialog_new(enum MenuType mtype, enum WindowType wtype,
+struct SimpleDialogWindows simple_dialog_new(const struct MenuDefinition *md,
+                                             enum WindowType wtype,
                                              const struct Mapping *help_data)
 {
   struct MuttWindow *dlg = mutt_window_new(wtype, MUTT_WIN_ORIENT_VERTICAL,
                                            MUTT_WIN_SIZE_MAXIMISE, MUTT_WIN_SIZE_UNLIMITED,
                                            MUTT_WIN_SIZE_UNLIMITED);
-  dlg->help_menu = mtype;
+  dlg->help_menu = md->id;
   dlg->help_data = help_data;
 
-  struct MuttWindow *win_menu = menu_window_new(mtype, NeoMutt->sub);
+  struct MuttWindow *win_menu = menu_window_new(md->id, NeoMutt->sub);
   dlg->wdata = win_menu->wdata;
 
   struct MuttWindow *win_sbar = sbar_new();

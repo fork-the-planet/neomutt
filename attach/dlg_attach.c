@@ -216,8 +216,7 @@ void dlg_attachment(struct ConfigSubset *sub, struct MailboxView *mv,
   mutt_parse_mime_message(e, fp);
   exec_message_hook(m, e, CMD_MESSAGE_HOOK);
 
-  struct SimpleDialogWindows sdw = simple_dialog_new(MENU_ATTACHMENT, WT_DLG_ATTACHMENT,
-                                                     AttachmentHelp);
+  struct SimpleDialogWindows sdw = simple_dialog_new(MdAttach, WT_DLG_ATTACHMENT, AttachmentHelp);
   struct Menu *menu = sdw.menu;
   menu->make_entry = attach_make_entry;
   menu->tag = attach_tag;

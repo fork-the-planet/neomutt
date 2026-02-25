@@ -200,7 +200,7 @@ struct SmimeKey *dlg_smime(struct SmimeKey *keys, const char *query)
   }
   /* sorting keys might be done later - TODO */
 
-  struct SimpleDialogWindows sdw = simple_dialog_new(MENU_SMIME, WT_DLG_SMIME, SmimeHelp);
+  struct SimpleDialogWindows sdw = simple_dialog_new(MdSmime, WT_DLG_SMIME, SmimeHelp);
   struct Menu *menu = sdw.menu;
 
   struct SmimeData sd = { false, menu, &ska, NULL };

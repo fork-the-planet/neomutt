@@ -246,8 +246,7 @@ void dlg_autocrypt(void)
   if (mutt_autocrypt_init(false))
     return;
 
-  struct SimpleDialogWindows sdw = simple_dialog_new(MENU_AUTOCRYPT, WT_DLG_AUTOCRYPT,
-                                                     AutocryptHelp);
+  struct SimpleDialogWindows sdw = simple_dialog_new(MdAutocrypt, WT_DLG_AUTOCRYPT, AutocryptHelp);
 
   struct Menu *menu = sdw.menu;
 

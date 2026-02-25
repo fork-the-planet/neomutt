@@ -224,7 +224,7 @@ struct PgpKeyInfo *dlg_pgp(struct PgpKeyInfo *keys, struct Address *p, const cha
 
   pgp_sort_keys(&pua);
 
-  struct SimpleDialogWindows sdw = simple_dialog_new(MENU_PGP, WT_DLG_PGP, PgpHelp);
+  struct SimpleDialogWindows sdw = simple_dialog_new(MdPgp, WT_DLG_PGP, PgpHelp);
   menu = sdw.menu;
   struct PgpData pd = { false, menu, &pua, NULL };
 

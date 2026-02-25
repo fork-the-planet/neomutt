@@ -208,8 +208,7 @@ static const struct AttrColor *post_color(struct Menu *menu, int line)
  */
 struct Email *dlg_postponed(struct Mailbox *m)
 {
-  struct SimpleDialogWindows sdw = simple_dialog_new(MENU_POSTPONED, WT_DLG_POSTPONED,
-                                                     PostponedHelp);
+  struct SimpleDialogWindows sdw = simple_dialog_new(MdPostpone, WT_DLG_POSTPONED, PostponedHelp);
   // Required to number the emails
   struct MailboxView *mv = mview_new(m, NeoMutt->notify);
 

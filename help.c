@@ -92,17 +92,17 @@ static const char *ToCharsDesc[] = {
 
 /**
  * dump_message_flags - Write out all the message flags
- * @param menu Menu type
- * @param fp   File to write to
+ * @param md Menu Definition
+ * @param fp File to write to
  *
  * Display a quick reminder of all the flags in the config options:
  * - $crypt_chars
  * - $flag_chars
  * - $to_chars
  */
-static void dump_message_flags(enum MenuType menu, FILE *fp)
+static void dump_message_flags(const struct MenuDefinition *md, FILE *fp)
 {
-  if (menu != MENU_INDEX)
+  if (!md || (md->id != MENU_INDEX))
     return;
 
   const char *flag = NULL;
@@ -247,7 +247,7 @@ void mutt_help(const struct MenuDefinition *md)
     fprintf(fp, "%*s  %s\n", -wu1, bi->a[1], bi->a[2]);
   }
 
-  dump_message_flags(md->id, fp);
+  dump_message_flags(md, fp);
   mutt_file_fclose(&fp);
 
   // ---------------------------------------------------------------------------

@@ -26,7 +26,6 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include "mutt/lib.h"
-#include "menu/lib.h"
 
 struct Command;
 struct MenuDefinition;
@@ -52,7 +51,7 @@ void               escape_macro        (const char *macro, struct Buffer *buf);
 void               gather_menu         (const struct MenuDefinition *md, struct BindingInfoArray *bia_bind, struct BindingInfoArray *bia_macro, bool one_submenu);
 int                gather_unbound      (const struct MenuDefinition *md, struct BindingInfoArray *bia_unbound);
 const char *       help_lookup_function(const struct MenuDefinition *md, int op);
-struct StringArray km_get_func_array   (enum MenuType mtype);
+struct StringArray km_get_func_array   (const struct MenuDefinition *md);
 int                measure_column      (struct BindingInfoArray *bia, int col);
 int                print_bind          (const struct MenuDefinition *md, FILE *fp);
 int                print_macro         (const struct MenuDefinition *md, FILE *fp);

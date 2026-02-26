@@ -469,30 +469,21 @@ int gather_unbound(const struct MenuDefinition *md, struct BindingInfoArray *bia
 
 /**
  * km_get_func_array - Get array of function names for a Menu
- * @param mtype Menu type
+ * @param md Menu Definition
  */
-struct StringArray km_get_func_array(enum MenuType mtype)
+struct StringArray km_get_func_array(const struct MenuDefinition *md)
 {
   struct StringArray fna = ARRAY_HEAD_INITIALIZER;
 
-  struct MenuDefinition *md = NULL;
-  ARRAY_FOREACH(md, &MenuDefs)
+  struct SubMenu **smp = NULL;
+  ARRAY_FOREACH(smp, &md->submenus)
   {
-    if (md->id != mtype)
-      continue;
+    struct SubMenu *sm = *smp;
 
-    struct SubMenu **smp = NULL;
-
-    ARRAY_FOREACH(smp, &md->submenus)
+    for (int i = 0; sm->functions[i].name; i++)
     {
-      struct SubMenu *sm = *smp;
-
-      for (int i = 0; sm->functions[i].name; i++)
-      {
-        ARRAY_ADD(&fna, sm->functions[i].name);
-      }
+      ARRAY_ADD(&fna, sm->functions[i].name);
     }
-    break;
   }
 
   return fna;

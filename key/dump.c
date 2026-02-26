@@ -127,23 +127,16 @@ const char *help_lookup_function(const struct MenuDefinition *md, int op)
 
 /**
  * gather_menu - Gather info about one menu
- * @param[in]  menu      Menu type
+ * @param[in]  md        Menu Definition
  * @param[out] bia_bind  Array for bind  results (may be NULL)
  * @param[out] bia_macro Array for macro results (may be NULL)
  * @param[in]  one_submenu Only parse the first SubMenu
  */
-void gather_menu(enum MenuType menu, struct BindingInfoArray *bia_bind,
+void gather_menu(const struct MenuDefinition *md, struct BindingInfoArray *bia_bind,
                  struct BindingInfoArray *bia_macro, bool one_submenu)
 {
   struct Buffer *key_binding = buf_pool_get();
   struct Buffer *macro = buf_pool_get();
-
-  struct MenuDefinition *md = NULL;
-  ARRAY_FOREACH(md, &MenuDefs)
-  {
-    if (md->id == menu)
-      break;
-  }
 
   struct SubMenu **smp = NULL;
 
@@ -250,7 +243,7 @@ int measure_column(struct BindingInfoArray *bia, int col)
 
 /**
  * print_bind - Display the bindings for one menu
- * @param md Menu Definition, NULL for all Menus
+ * @param md Menu Definition
  * @param fp File to write to
  * @retval num Number of bindings
  */
@@ -258,7 +251,7 @@ int print_bind(const struct MenuDefinition *md, FILE *fp)
 {
   struct BindingInfoArray bia_bind = ARRAY_HEAD_INITIALIZER;
 
-  gather_menu(md ? md->id : MENU_MAX, &bia_bind, NULL, true);
+  gather_menu(md, &bia_bind, NULL, true);
   if (ARRAY_EMPTY(&bia_bind))
     return 0;
 
@@ -314,7 +307,7 @@ void colon_bind(const struct MenuDefinition *md, FILE *fp)
 
 /**
  * print_macro - Display the macros for one menu
- * @param md Menu Definition, NULL for all Menus
+ * @param md Menu Definition
  * @param fp File to write to
  * @retval num Number of macros
  */
@@ -322,7 +315,7 @@ int print_macro(const struct MenuDefinition *md, FILE *fp)
 {
   struct BindingInfoArray bia_macro = ARRAY_HEAD_INITIALIZER;
 
-  gather_menu(md ? md->id : MENU_MAX, NULL, &bia_macro, true);
+  gather_menu(md, NULL, &bia_macro, true);
   if (ARRAY_EMPTY(&bia_macro))
     return 0;
 

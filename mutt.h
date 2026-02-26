@@ -27,7 +27,6 @@
 
 #include "config.h"
 #include "mutt.h"
-#include "menu/lib.h"
 #include <limits.h>
 #include <stdbool.h>
 
@@ -35,6 +34,7 @@ struct Buffer;
 struct Email;
 struct EmailArray;
 struct Mailbox;
+struct MenuDefinition;
 struct NotifyCallback;
 
 /* On OS X 10.5.x, wide char functions are inlined by default breaking
@@ -111,7 +111,7 @@ int mutt_ev_message(struct Mailbox *m, struct EmailArray *ea, enum EvMessage act
 int mutt_system(const char *cmd);
 
 int mutt_set_xdg_path(enum XdgType type, struct Buffer *buf);
-void mutt_help(enum MenuType menu);
+void mutt_help(const struct MenuDefinition *md);
 void mutt_set_flag(struct Mailbox *m, struct Email *e, enum MessageType flag, bool bf, bool upd_mbox);
 void mutt_signal_init(void);
 void mutt_emails_set_flag(struct Mailbox *m, struct EmailArray *ea, enum MessageType flag, bool bf);

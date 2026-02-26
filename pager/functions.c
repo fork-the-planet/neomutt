@@ -1008,7 +1008,7 @@ static int op_help(struct IndexSharedData *shared,
     mutt_error(_("Help is currently being shown"));
     return FR_ERROR;
   }
-  mutt_help(MENU_PAGER);
+  mutt_help(MdPager);
   pager_queue_redraw(priv, PAGER_REDRAW_PAGER);
   return FR_SUCCESS;
 }

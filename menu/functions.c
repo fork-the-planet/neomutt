@@ -229,7 +229,8 @@ static int menu_search(struct Menu *menu, const struct KeyEvent *event)
  */
 static int op_help(struct Menu *menu, const struct KeyEvent *event)
 {
-  mutt_help(menu->type);
+  const struct MenuDefinition *md = menu_find(menu->type);
+  mutt_help(md);
   menu->redraw = MENU_REDRAW_FULL;
   return FR_SUCCESS;
 }

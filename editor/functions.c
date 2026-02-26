@@ -442,7 +442,7 @@ static int op_editor_transpose_chars(struct EnterWindowData *wdata, const struct
  */
 static int op_help(struct EnterWindowData *wdata, const struct KeyEvent *event)
 {
-  mutt_help(MENU_EDITOR);
+  mutt_help(MdEditor);
   return FR_SUCCESS;
 }
 

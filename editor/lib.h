@@ -40,6 +40,7 @@
 #include <stddef.h>
 // IWYU pragma: begin_keep
 #include "enter.h"
+#include "functions.h"
 #include "state.h"
 #include "wdata.h"
 // IWYU pragma: end_keep

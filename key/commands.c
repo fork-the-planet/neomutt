@@ -34,7 +34,10 @@
 #include "core/lib.h"
 #include "gui/lib.h"
 #include "commands.h"
+#include "editor/lib.h"
+#include "index/lib.h"
 #include "menu/lib.h"
+#include "pager/lib.h"
 #include "parse/lib.h"
 #include "dump.h"
 #include "get.h"
@@ -358,63 +361,57 @@ done:
 
 /**
  * set_default_bindings - Set some safe default keybindings
- * @param menu Menu to update
+ * @param md Menu Definition to update
  */
-void set_default_bindings(enum MenuType menu)
+void set_default_bindings(const struct MenuDefinition *md)
 {
-  struct MenuDefinition *md = NULL;
   bool success = false;
 
-  if ((menu == MENU_MAX) || (menu == MENU_GENERIC))
+  if (!md || (md == MdGeneric))
   {
-    md = menu_find(MENU_GENERIC);
-    km_bind(md, "<enter>", OP_GENERIC_SELECT_ENTRY, NULL, NULL, NULL);
-    km_bind(md, "<return>", OP_GENERIC_SELECT_ENTRY, NULL, NULL, NULL);
-    km_bind(md, ":", OP_ENTER_COMMAND, NULL, NULL, NULL);
-    km_bind(md, "?", OP_HELP, NULL, NULL, NULL);
-    km_bind(md, "q", OP_EXIT, NULL, NULL, NULL);
+    km_bind(MdGeneric, "<enter>", OP_GENERIC_SELECT_ENTRY, NULL, NULL, NULL);
+    km_bind(MdGeneric, "<return>", OP_GENERIC_SELECT_ENTRY, NULL, NULL, NULL);
+    km_bind(MdGeneric, ":", OP_ENTER_COMMAND, NULL, NULL, NULL);
+    km_bind(MdGeneric, "?", OP_HELP, NULL, NULL, NULL);
+    km_bind(MdGeneric, "q", OP_EXIT, NULL, NULL, NULL);
     success = true;
   }
 
-  if ((menu == MENU_MAX) || (menu == MENU_INDEX))
+  if (!md || (md == MdIndex))
   {
-    md = menu_find(MENU_INDEX);
-    km_bind(md, "<enter>", OP_DISPLAY_MESSAGE, NULL, NULL, NULL);
-    km_bind(md, "<return>", OP_DISPLAY_MESSAGE, NULL, NULL, NULL);
-    km_bind(md, "q", OP_EXIT, NULL, NULL, NULL);
+    km_bind(MdIndex, "<enter>", OP_DISPLAY_MESSAGE, NULL, NULL, NULL);
+    km_bind(MdIndex, "<return>", OP_DISPLAY_MESSAGE, NULL, NULL, NULL);
+    km_bind(MdIndex, "q", OP_EXIT, NULL, NULL, NULL);
     success = true;
   }
 
-  if ((menu == MENU_MAX) || (menu == MENU_EDITOR))
+  if (!md || (md == MdEditor))
   {
-    md = menu_find(MENU_EDITOR);
-    km_bind(md, "<backspace>", OP_EDITOR_BACKSPACE, NULL, NULL, NULL);
-    km_bind(md, "\177", OP_EDITOR_BACKSPACE, NULL, NULL, NULL);
+    km_bind(MdEditor, "<backspace>", OP_EDITOR_BACKSPACE, NULL, NULL, NULL);
+    km_bind(MdEditor, "\177", OP_EDITOR_BACKSPACE, NULL, NULL, NULL);
     success = true;
   }
 
-  if ((menu == MENU_MAX) || (menu == MENU_PAGER))
+  if (!md || (md == MdPager))
   {
-    md = menu_find(MENU_PAGER);
-    km_bind(md, ":", OP_ENTER_COMMAND, NULL, NULL, NULL);
-    km_bind(md, "?", OP_HELP, NULL, NULL, NULL);
-    km_bind(md, "q", OP_EXIT, NULL, NULL, NULL);
+    km_bind(MdPager, ":", OP_ENTER_COMMAND, NULL, NULL, NULL);
+    km_bind(MdPager, "?", OP_HELP, NULL, NULL, NULL);
+    km_bind(MdPager, "q", OP_EXIT, NULL, NULL, NULL);
     success = true;
   }
 
-  if ((menu == MENU_MAX) || (menu == MENU_DIALOG))
+  if (!md || (md == MdDialog))
   {
-    md = menu_find(MENU_DIALOG);
-    km_bind(md, ":", OP_ENTER_COMMAND, NULL, NULL, NULL);
-    km_bind(md, "?", OP_HELP, NULL, NULL, NULL);
-    km_bind(md, "q", OP_EXIT, NULL, NULL, NULL);
+    km_bind(MdDialog, ":", OP_ENTER_COMMAND, NULL, NULL, NULL);
+    km_bind(MdDialog, "?", OP_HELP, NULL, NULL, NULL);
+    km_bind(MdDialog, "q", OP_EXIT, NULL, NULL, NULL);
     success = true;
   }
 
   if (success)
   {
     mutt_debug(LL_NOTIFY, "NT_BINDING_ADD set defaults\n");
-    struct EventBinding ev_b = { menu, NULL, OP_NULL };
+    struct EventBinding ev_b = { md ? md->id : MENU_MAX, NULL, OP_NULL };
     notify_send(NeoMutt->notify, NT_BINDING, NT_BINDING_ADD, &ev_b);
   }
 }
@@ -616,7 +613,7 @@ bool parse_unbind_exec(const struct Command *cmd, struct ParseUnbind *args, stru
       notify_send(NeoMutt->notify, NT_BINDING, nb, &ev_b);
 
       // restore some bindings for this menu
-      set_default_bindings(md->id);
+      set_default_bindings(md);
     }
   }
 
@@ -630,7 +627,7 @@ bool parse_unbind_exec(const struct Command *cmd, struct ParseUnbind *args, stru
     notify_send(NeoMutt->notify, NT_BINDING, nb, &ev_b);
 
     // restore some bindings for all menus
-    set_default_bindings(MENU_MAX);
+    set_default_bindings(NULL);
   }
 
   buf_pool_release(&keystr);

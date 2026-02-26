@@ -52,9 +52,9 @@ void               escape_macro        (const char *macro, struct Buffer *buf);
 void               gather_menu         (enum MenuType menu, struct BindingInfoArray *bia_bind, struct BindingInfoArray *bia_macro, bool one_submenu);
 int                gather_unbound      (enum MenuType mtype, struct BindingInfoArray *bia_unbound);
 const char *       help_lookup_function(const struct MenuDefinition *md, int op);
-struct StringArray km_get_func_array(enum MenuType mtype);
+struct StringArray km_get_func_array   (enum MenuType mtype);
 int                measure_column      (struct BindingInfoArray *bia, int col);
-int                print_bind          (enum MenuType menu, FILE *fp);
-int                print_macro         (enum MenuType menu, FILE *fp);
+int                print_bind          (const struct MenuDefinition *md, FILE *fp);
+int                print_macro         (const struct MenuDefinition *md, FILE *fp);
 
 #endif /* MUTT_KEY_DUMP_H */

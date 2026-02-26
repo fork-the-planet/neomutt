@@ -250,15 +250,15 @@ int measure_column(struct BindingInfoArray *bia, int col)
 
 /**
  * print_bind - Display the bindings for one menu
- * @param menu Menu type
- * @param fp   File to write to
+ * @param md Menu Definition, NULL for all Menus
+ * @param fp File to write to
  * @retval num Number of bindings
  */
-int print_bind(enum MenuType menu, FILE *fp)
+int print_bind(const struct MenuDefinition *md, FILE *fp)
 {
   struct BindingInfoArray bia_bind = ARRAY_HEAD_INITIALIZER;
 
-  gather_menu(menu, &bia_bind, NULL, true);
+  gather_menu(md ? md->id : MENU_MAX, &bia_bind, NULL, true);
   if (ARRAY_EMPTY(&bia_bind))
     return 0;
 
@@ -266,7 +266,7 @@ int print_bind(enum MenuType menu, FILE *fp)
   const int wb0 = measure_column(&bia_bind, 0);
   const int wb1 = measure_column(&bia_bind, 1);
 
-  const char *menu_name = km_get_menu_name(menu);
+  const char *menu_name = md->name;
 
   struct BindingInfo *bi = NULL;
   ARRAY_FOREACH(bi, &bia_bind)
@@ -298,13 +298,13 @@ void colon_bind(const struct MenuDefinition *md, FILE *fp)
 {
   if (md)
   {
-    print_bind(md->id, fp);
+    print_bind(md, fp);
   }
   else
   {
     ARRAY_FOREACH(md, &MenuDefs)
     {
-      if (print_bind(md->id, fp) > 0)
+      if (print_bind(md, fp) > 0)
       {
         fprintf(fp, "\n");
       }
@@ -314,22 +314,22 @@ void colon_bind(const struct MenuDefinition *md, FILE *fp)
 
 /**
  * print_macro - Display the macros for one menu
- * @param menu Menu type
- * @param fp   File to write to
+ * @param md Menu Definition, NULL for all Menus
+ * @param fp File to write to
  * @retval num Number of macros
  */
-int print_macro(enum MenuType menu, FILE *fp)
+int print_macro(const struct MenuDefinition *md, FILE *fp)
 {
   struct BindingInfoArray bia_macro = ARRAY_HEAD_INITIALIZER;
 
-  gather_menu(menu, NULL, &bia_macro, true);
+  gather_menu(md ? md->id : MENU_MAX, NULL, &bia_macro, true);
   if (ARRAY_EMPTY(&bia_macro))
     return 0;
 
   ARRAY_SORT(&bia_macro, binding_sort, NULL);
   const int wm0 = measure_column(&bia_macro, 0);
 
-  const char *menu_name = km_get_menu_name(menu);
+  const char *menu_name = md->name;
 
   struct BindingInfo *bi = NULL;
   ARRAY_FOREACH(bi, &bia_macro)
@@ -369,13 +369,13 @@ void colon_macro(const struct MenuDefinition *md, FILE *fp)
 {
   if (md)
   {
-    print_macro(md->id, fp);
+    print_macro(md, fp);
   }
   else
   {
     ARRAY_FOREACH(md, &MenuDefs)
     {
-      if (print_macro(md->id, fp) > 0)
+      if (print_macro(md, fp) > 0)
       {
         fprintf(fp, "\n");
       }

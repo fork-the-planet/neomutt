@@ -166,7 +166,7 @@ void mutt_help(const struct MenuDefinition *md)
 
   const int wm0 = measure_column(&bia_macro, 0);
 
-  gather_unbound(md->id, &bia_unbound);
+  gather_unbound(md, &bia_unbound);
 
   ARRAY_SORT(&bia_unbound, binding_sort, NULL);
   const int wu1 = measure_column(&bia_unbound, 1);

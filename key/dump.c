@@ -431,21 +431,14 @@ done:
 
 /**
  * gather_unbound - Gather info about unbound functions for one menu
- * @param[in]  mtype       Menu Type, e.g. #MENU_INDEX
+ * @param[in]  md          Menu Definition
  * @param[out] bia_unbound Unbound functions
  * @retval num Number of unbound functions
  */
-int gather_unbound(enum MenuType mtype, struct BindingInfoArray *bia_unbound)
+int gather_unbound(const struct MenuDefinition *md, struct BindingInfoArray *bia_unbound)
 {
   if (!bia_unbound)
     return 0;
-
-  struct MenuDefinition *md = NULL;
-  ARRAY_FOREACH(md, &MenuDefs)
-  {
-    if (md->id == mtype)
-      break;
-  }
 
   struct SubMenu **smp = NULL;
 

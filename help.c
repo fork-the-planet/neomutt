@@ -102,7 +102,7 @@ static const char *ToCharsDesc[] = {
  */
 static void dump_message_flags(const struct MenuDefinition *md, FILE *fp)
 {
-  if (!md || (md->id != MENU_INDEX))
+  if (md != MdIndex)
     return;
 
   const char *flag = NULL;

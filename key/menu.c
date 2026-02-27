@@ -51,7 +51,7 @@
 enum CommandResult km_bind(struct MenuDefinition *md, const char *key_str,
                            int op, char *macro, char *desc, struct Buffer *err)
 {
-  if (!md)
+  if (!md || ARRAY_EMPTY(&md->submenus))
     return MUTT_CMD_ERROR;
 
   enum CommandResult rc = MUTT_CMD_SUCCESS;

@@ -177,40 +177,6 @@ struct Keymap *km_find_func(const struct MenuDefinition *md, int func)
 }
 
 /**
- * km_get_menu_name - Get the name of a Menu
- * @param mtype Menu Type
- * @retval str Menu name, e.g. "index"
- */
-const char *km_get_menu_name(int mtype)
-{
-  struct MenuDefinition *md = NULL;
-  ARRAY_FOREACH(md, &MenuDefs)
-  {
-    if (md->id == mtype)
-      return md->name;
-  }
-
-  return "UNKNOWN";
-}
-
-/**
- * km_get_menu_id - Get the ID of a Menu
- * @param name Menu name, e.g. "index"
- * @retval num Menu ID, e.g. #MENU_INDEX
- */
-int km_get_menu_id(const char *name)
-{
-  struct MenuDefinition *md = NULL;
-  ARRAY_FOREACH(md, &MenuDefs)
-  {
-    if (mutt_str_equal(md->name, name))
-      return md->id;
-  }
-
-  return -1;
-}
-
-/**
  * km_get_op - Get the OpCode for a Function
  * @param func Function name, e.g. "exit"
  * @retval num OpCode, e.g. OP_EXIT

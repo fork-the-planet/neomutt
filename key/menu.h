@@ -96,8 +96,6 @@ typedef void (*init_keys_t)(struct SubMenu *sm_generic);
 
 bool                   is_bound           (const struct MenuDefinition *md, int op);
 struct Keymap *        km_find_func       (const struct MenuDefinition *md, int func);
-int                    km_get_menu_id     (const char *name);
-const char *           km_get_menu_name   (int mtype);
 int                    km_get_op          (const char *func);
 int                    km_get_op_menu     (int mtype, const char *func);
 struct MenuDefinition *menu_find          (int menu);

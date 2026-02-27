@@ -32,7 +32,7 @@
 enum MenuType
 {
   MENU_ALIAS = 1,        ///< Select an email address by its alias
-  MENU_ATTACHMENT,       ///< Select an attachment
+  MENU_ATTACH,           ///< Select an attachment
 #ifdef USE_AUTOCRYPT
   MENU_AUTOCRYPT,        ///< Autocrypt Account menu
 #endif
@@ -44,7 +44,7 @@ enum MenuType
   MENU_INDEX,            ///< Index panel (list of emails)
   MENU_PAGER,            ///< Pager pager (email viewer)
   MENU_PGP,              ///< PGP encryption menu
-  MENU_POSTPONED,        ///< Select a postponed email
+  MENU_POSTPONE,         ///< Select a postponed email
   MENU_QUERY,            ///< Select from results of external query
   MENU_SIDEBAR,          ///< Sidebar menu
   MENU_SMIME,            ///< SMIME encryption menu

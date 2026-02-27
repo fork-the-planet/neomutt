@@ -131,7 +131,7 @@ void attach_init_keys(struct SubMenu *sm_generic)
   struct SubMenu *sm = NULL;
 
   sm = km_register_submenu(OpAttachment);
-  md = km_register_menu(MENU_ATTACHMENT, "attach");
+  md = km_register_menu(MENU_ATTACH, "attach");
   km_menu_add_submenu(md, sm);
   km_menu_add_submenu(md, sm_generic);
   km_menu_add_bindings(md, AttachmentDefaultBindings);

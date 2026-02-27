@@ -277,7 +277,7 @@ const char *name_menu_type(enum MenuType mt)
   switch (mt)
   {
     DEBUG_NAME(MENU_ALIAS);
-    DEBUG_NAME(MENU_ATTACHMENT);
+    DEBUG_NAME(MENU_ATTACH);
 #ifdef USE_AUTOCRYPT
     DEBUG_NAME(MENU_AUTOCRYPT);
 #endif
@@ -289,7 +289,7 @@ const char *name_menu_type(enum MenuType mt)
     DEBUG_NAME(MENU_INDEX);
     DEBUG_NAME(MENU_PAGER);
     DEBUG_NAME(MENU_PGP);
-    DEBUG_NAME(MENU_POSTPONED);
+    DEBUG_NAME(MENU_POSTPONE);
     DEBUG_NAME(MENU_QUERY);
     DEBUG_NAME(MENU_SMIME);
     DEBUG_NAME(MENU_MAX);

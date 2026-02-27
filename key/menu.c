@@ -132,24 +132,17 @@ enum CommandResult km_bind(struct MenuDefinition *md, const char *key_str,
     }
   }
 
-  if (map->op == OP_NULL)
+  if (last) /* if queue has at least one entry */
   {
-    keymap_free(&map);
+    if (STAILQ_NEXT(last, entries))
+      STAILQ_INSERT_AFTER(kml, last, map, entries);
+    else /* last entry in the queue */
+      STAILQ_INSERT_TAIL(kml, map, entries);
+    last->eq = lastpos;
   }
-  else
+  else /* queue is empty, so insert from head */
   {
-    if (last) /* if queue has at least one entry */
-    {
-      if (STAILQ_NEXT(last, entries))
-        STAILQ_INSERT_AFTER(kml, last, map, entries);
-      else /* last entry in the queue */
-        STAILQ_INSERT_TAIL(kml, map, entries);
-      last->eq = lastpos;
-    }
-    else /* queue is empty, so insert from head */
-    {
-      STAILQ_INSERT_HEAD(kml, map, entries);
-    }
+    STAILQ_INSERT_HEAD(kml, map, entries);
   }
 
   return rc;

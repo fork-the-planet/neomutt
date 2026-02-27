@@ -196,7 +196,7 @@ static int helpbar_binding_observer(struct NotifyCallback *nc)
     return 0;
 
   struct EventBinding *ev_b = nc->event_data;
-  if (wdata->help_md && (wdata->help_md->id != ev_b->menu))
+  if (wdata->help_md && (wdata->help_md != ev_b->menu))
     return 0;
 
   win_helpbar->actions |= WA_RECALC;

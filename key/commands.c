@@ -292,7 +292,7 @@ enum CommandResult parse_bind(const struct Command *cmd, struct Buffer *line,
 
       int op = km_get_op_menu(md->id, buf_string(token));
 
-      struct EventBinding ev_b = { md->id, key, op };
+      struct EventBinding ev_b = { md, key, op };
       notify_send(NeoMutt->notify, NT_BINDING, NT_BINDING_DELETE, &ev_b);
     }
   }
@@ -326,7 +326,7 @@ enum CommandResult parse_bind(const struct Command *cmd, struct Buffer *line,
         keymap_expand_string(key, keystr);
         mutt_debug(LL_NOTIFY, "NT_BINDING_NEW: %s %s\n", md->name, buf_string(keystr));
 
-        struct EventBinding ev_b = { md->id, key, op };
+        struct EventBinding ev_b = { md, key, op };
         notify_send(NeoMutt->notify, NT_BINDING, NT_BINDING_ADD, &ev_b);
       }
     }
@@ -392,7 +392,7 @@ void set_default_bindings(const struct MenuDefinition *md)
   if (success)
   {
     mutt_debug(LL_NOTIFY, "NT_BINDING_ADD set defaults\n");
-    struct EventBinding ev_b = { md ? md->id : MENU_MAX, NULL, OP_NULL };
+    struct EventBinding ev_b = { md, NULL, OP_NULL };
     notify_send(NeoMutt->notify, NT_BINDING, NT_BINDING_ADD, &ev_b);
   }
 }
@@ -577,7 +577,7 @@ bool parse_unbind_exec(const struct Command *cmd, struct ParseUnbind *args, stru
           mutt_debug(LL_NOTIFY, "%s: %s %s\n", notify_binding_name(nb),
                      md->name, buf_string(keystr));
 
-          struct EventBinding ev_b = { md->id, args->key, OP_NULL };
+          struct EventBinding ev_b = { md, args->key, OP_NULL };
           notify_send(NeoMutt->notify, NT_BINDING, nb, &ev_b);
         }
       }
@@ -590,7 +590,7 @@ bool parse_unbind_exec(const struct Command *cmd, struct ParseUnbind *args, stru
       mutt_debug(LL_NOTIFY, "%s: %s %s\n", notify_binding_name(nb), md->name,
                  buf_string(keystr));
 
-      struct EventBinding ev_b = { md->id, args->key, OP_NULL };
+      struct EventBinding ev_b = { md, args->key, OP_NULL };
       notify_send(NeoMutt->notify, NT_BINDING, nb, &ev_b);
 
       // restore some bindings for this menu
@@ -604,7 +604,7 @@ bool parse_unbind_exec(const struct Command *cmd, struct ParseUnbind *args, stru
     keymap_expand_string(args->key, keystr);
     mutt_debug(LL_NOTIFY, "%s: ALL %s\n", notify_binding_name(nb), buf_string(keystr));
 
-    struct EventBinding ev_b = { MENU_MAX, args->key, OP_NULL };
+    struct EventBinding ev_b = { NULL, args->key, OP_NULL };
     notify_send(NeoMutt->notify, NT_BINDING, nb, &ev_b);
 
     // restore some bindings for all menus
@@ -707,7 +707,7 @@ enum CommandResult parse_macro(const struct Command *cmd, struct Buffer *line,
             keymap_expand_string(key, keystr);
             mutt_debug(LL_NOTIFY, "NT_MACRO_NEW: %s %s\n", md->name, buf_string(keystr));
 
-            struct EventBinding ev_b = { md->id, key, OP_MACRO };
+            struct EventBinding ev_b = { md, key, OP_MACRO };
             notify_send(NeoMutt->notify, NT_BINDING, NT_MACRO_ADD, &ev_b);
             continue;
           }
@@ -729,7 +729,7 @@ enum CommandResult parse_macro(const struct Command *cmd, struct Buffer *line,
           keymap_expand_string(key, keystr);
           mutt_debug(LL_NOTIFY, "NT_MACRO_NEW: %s %s\n", md->name, buf_string(keystr));
 
-          struct EventBinding ev_b = { md->id, key, OP_MACRO };
+          struct EventBinding ev_b = { md, key, OP_MACRO };
           notify_send(NeoMutt->notify, NT_BINDING, NT_MACRO_ADD, &ev_b);
           continue;
         }

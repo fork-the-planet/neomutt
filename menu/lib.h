@@ -48,6 +48,7 @@
 
 struct ConfigSubset;
 struct KeyEvent;
+struct MenuDefinition;
 struct MuttWindow;
 
 // Observers of #NT_MENU will not be passed any Event data.
@@ -190,7 +191,7 @@ void         menu_cleanup(void);
 enum MenuType menu_get_current_type(void);
 void         menu_init(void);
 
-struct MuttWindow *menu_window_new(enum MenuType type, struct ConfigSubset *sub);
+struct MuttWindow *menu_window_new(const struct MenuDefinition *md, struct ConfigSubset *sub);
 
 int  menu_get_index(struct Menu *menu);
 MenuRedrawFlags menu_set_index(struct Menu *menu, int index);

@@ -80,6 +80,7 @@
 #include "attach/lib.h"
 #include "color/lib.h"
 #include "index/lib.h"
+#include "key/lib.h"
 #include "menu/lib.h"
 #include "postpone/lib.h"
 #include "globals.h"
@@ -655,7 +656,7 @@ static int index_repaint(struct MuttWindow *win)
  */
 struct MuttWindow *index_window_new(struct IndexPrivateData *priv)
 {
-  struct MuttWindow *win = menu_window_new(MENU_INDEX, NeoMutt->sub);
+  struct MuttWindow *win = menu_window_new(MdIndex, NeoMutt->sub);
   win->recalc = index_recalc;
   win->repaint = index_repaint;
 

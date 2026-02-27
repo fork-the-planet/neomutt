@@ -67,7 +67,6 @@
 #include "config/lib.h"
 #include "core/lib.h"
 #include "simple.h"
-#include "key/lib.h"
 #include "menu/lib.h"
 #include "dialog.h"
 #include "mutt_window.h"
@@ -140,7 +139,7 @@ struct SimpleDialogWindows simple_dialog_new(const struct MenuDefinition *md,
   dlg->help_md = md;
   dlg->help_data = help_data;
 
-  struct MuttWindow *win_menu = menu_window_new(md->id, NeoMutt->sub);
+  struct MuttWindow *win_menu = menu_window_new(md, NeoMutt->sub);
   dlg->wdata = win_menu->wdata;
 
   struct MuttWindow *win_sbar = sbar_new();

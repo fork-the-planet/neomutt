@@ -69,8 +69,10 @@
 #include "attach/lib.h"
 #include "convert/lib.h"
 #include "expando/lib.h"
+#include "key/lib.h"
 #include "menu/lib.h"
 #include "attach_data.h"
+#include "functions.h"
 #include "shared_data.h"
 
 /**
@@ -267,7 +269,7 @@ static int attach_recalc(struct MuttWindow *win)
  */
 struct MuttWindow *attach_new(struct MuttWindow *parent, struct ComposeSharedData *shared)
 {
-  struct MuttWindow *win_attach = menu_window_new(MENU_COMPOSE, NeoMutt->sub);
+  struct MuttWindow *win_attach = menu_window_new(MdCompose, NeoMutt->sub);
 
   struct ComposeAttachData *adata = attach_data_new(shared->email);
 

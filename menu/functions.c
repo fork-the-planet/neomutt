@@ -63,7 +63,9 @@ static int search(struct Menu *menu, int op)
   regex_t re = { 0 };
   struct Buffer *buf = buf_pool_get();
 
-  char *search_buf = ((menu->type < MENU_MAX)) ? SearchBuffers[menu->type] : NULL;
+  char *search_buf = (menu->md && (menu->md->id < MENU_MAX)) ?
+                         SearchBuffers[menu->md->id] :
+                         NULL;
 
   if (!(search_buf && *search_buf) || ((op != OP_SEARCH_NEXT) && (op != OP_SEARCH_OPPOSITE)))
   {
@@ -74,10 +76,10 @@ static int search(struct Menu *menu, int op)
     {
       goto done;
     }
-    if (menu->type < MENU_MAX)
+    if (menu->md && (menu->md->id < MENU_MAX))
     {
-      mutt_str_replace(&SearchBuffers[menu->type], buf_string(buf));
-      search_buf = SearchBuffers[menu->type];
+      mutt_str_replace(&SearchBuffers[menu->md->id], buf_string(buf));
+      search_buf = SearchBuffers[menu->md->id];
     }
     menu->search_dir = ((op == OP_SEARCH) || (op == OP_SEARCH_NEXT)) ?
                            MUTT_SEARCH_DOWN :
@@ -229,8 +231,7 @@ static int menu_search(struct Menu *menu, const struct KeyEvent *event)
  */
 static int op_help(struct Menu *menu, const struct KeyEvent *event)
 {
-  const struct MenuDefinition *md = menu_find(menu->type);
-  mutt_help(md);
+  mutt_help(menu->md);
   menu->redraw = MENU_REDRAW_FULL;
   return FR_SUCCESS;
 }

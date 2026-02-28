@@ -51,10 +51,10 @@
  */
 struct ParseUnbind
 {
-  bool menus[MENU_MAX]; ///< Menus to work on
-  bool all_menus;       ///< Command affects all Menus
-  bool all_keys;        ///< Command affects all key bindings
-  const char *key;      ///< Key string to be removed
+  struct MenuDefinitionArray menus; ///< Menus to work on
+  bool all_menus;                   ///< Command affects all Menus
+  bool all_keys;                    ///< Command affects all key bindings
+  const char *key;                  ///< Key string to be removed
 };
 
 /**
@@ -172,7 +172,7 @@ done:
  *
  * Expects to see: <menu-string>[,<menu-string>]
  */
-void parse_menu(bool *menus, const char *s, struct Buffer *err)
+void parse_menu(struct MenuDefinitionArray *menus, const char *s, struct Buffer *err)
 {
   char *menu_names_dup = mutt_str_dup(s);
   char *marker = menu_names_dup;
@@ -188,7 +188,7 @@ void parse_menu(bool *menus, const char *s, struct Buffer *err)
     }
     else
     {
-      menus[md->id] = true;
+      ARRAY_ADD(menus, *md);
     }
   }
 
@@ -478,7 +478,7 @@ bool parse_unbind_args(const struct Command *cmd, struct Buffer *line,
   }
   else
   {
-    parse_menu(args->menus, buf_string(token), err);
+    parse_menu(&args->menus, buf_string(token), err);
     if (!buf_is_empty(err))
       goto done;
 
@@ -550,8 +550,21 @@ bool parse_unbind_exec(const struct Command *cmd, struct ParseUnbind *args, stru
   struct MenuDefinition *md = NULL;
   ARRAY_FOREACH(md, &MenuDefs)
   {
-    if (!args->all_menus && !args->menus[md->id])
-      continue;
+    if (!args->all_menus)
+    {
+      bool found = false;
+      struct MenuDefinition *m = NULL;
+      ARRAY_FOREACH(m, &args->menus)
+      {
+        if (m->id == md->id)
+        {
+          found = true;
+          break;
+        }
+      }
+      if (!found)
+        continue;
+    }
 
     struct SubMenu **smp = ARRAY_GET(&md->submenus, 0);
     if (!smp || !*smp)
@@ -638,6 +651,7 @@ enum CommandResult parse_unbind(const struct Command *cmd, struct Buffer *line,
     rc = MUTT_CMD_SUCCESS;
 
 done:
+  ARRAY_FREE(&args.menus);
   FREE(&args.key);
   return rc;
 }

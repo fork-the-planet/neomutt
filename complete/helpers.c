@@ -293,7 +293,7 @@ int mutt_command_complete(struct CompletionData *cd, struct Buffer *buf,
         if (win && win->wdata)
         {
           struct Menu *menu = win->wdata;
-          mtype = menu->type;
+          mtype = menu->md->id;
         }
       }
       else

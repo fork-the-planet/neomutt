@@ -36,6 +36,7 @@
 #include "lib.h"
 #include "color/lib.h"
 #include "expando/lib.h" // IWYU pragma: keep
+#include "key/lib.h"
 #include "type.h"
 
 struct ConfigSubset;
@@ -105,7 +106,7 @@ enum MenuType menu_get_current_type(void)
   if (!menu)
     return MENU_GENERIC;
 
-  return menu->type;
+  return menu->md->id;
 }
 
 /**
@@ -129,16 +130,17 @@ void menu_free(struct Menu **ptr)
 
 /**
  * menu_new - Create a new Menu
- * @param type Menu type, e.g. #MENU_ALIAS
- * @param win  Parent Window
- * @param sub  Config items
+ * @param md  Menu Definition
+ * @param win Parent Window
+ * @param sub Config items
  * @retval ptr New Menu
  */
-struct Menu *menu_new(enum MenuType type, struct MuttWindow *win, struct ConfigSubset *sub)
+struct Menu *menu_new(const struct MenuDefinition *md, struct MuttWindow *win,
+                      struct ConfigSubset *sub)
 {
   struct Menu *menu = MUTT_MEM_CALLOC(1, struct Menu);
 
-  menu->type = type;
+  menu->md = md;
   menu->redraw = MENU_REDRAW_FULL;
   menu->color = default_color;
   menu->search = generic_search;

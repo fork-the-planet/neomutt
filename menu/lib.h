@@ -78,21 +78,21 @@ enum ExpandoDataMenu
  */
 struct Menu
 {
-  int current;              ///< Current entry
-  int max;                  ///< Number of entries in the menu
-  MenuRedrawFlags redraw;   ///< When to redraw the screen
-  enum MenuType type;       ///< Menu definition for keymap entries
-  int page_len;             ///< Number of entries per screen
-  bool tag_prefix     : 1;  ///< User has pressed <tag-prefix>
-  bool show_indicator : 1;  ///< Show the Indicator colour
-  struct MuttWindow *win;   ///< Window holding the Menu
-  struct ConfigSubset *sub; ///< Inherited config items
+  int current;                       ///< Current entry
+  int max;                           ///< Number of entries in the menu
+  MenuRedrawFlags redraw;            ///< When to redraw the screen
+  const struct MenuDefinition *md;   ///< Menu definition for keymap entries
+  int page_len;                      ///< Number of entries per screen
+  bool tag_prefix     : 1;           ///< User has pressed <tag-prefix>
+  bool show_indicator : 1;           ///< Show the Indicator colour
+  struct MuttWindow *win;            ///< Window holding the Menu
+  struct ConfigSubset *sub;          ///< Inherited config items
 
   /* the following are used only by menu_loop() */
-  int top;                ///< Entry that is the top of the current page
-  int old_current;        ///< For driver use only
-  int search_dir;         ///< Direction of search
-  int num_tagged;         ///< Number of tagged entries
+  int top;                           ///< Entry that is the top of the current page
+  int old_current;                   ///< For driver use only
+  int search_dir;                    ///< Direction of search
+  int num_tagged;                    ///< Number of tagged entries
 
   /**
    * @defgroup menu_make_entry make_entry()

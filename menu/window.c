@@ -142,7 +142,7 @@ struct MuttWindow *menu_window_new(const struct MenuDefinition *md, struct Confi
                                            MUTT_WIN_SIZE_MAXIMISE, MUTT_WIN_SIZE_UNLIMITED,
                                            MUTT_WIN_SIZE_UNLIMITED);
 
-  struct Menu *menu = menu_new(md->id, win, sub);
+  struct Menu *menu = menu_new(md, win, sub);
 
   win->recalc = menu_recalc;
   win->repaint = menu_repaint;

@@ -34,7 +34,7 @@ struct ParseError;
 
 enum CommandResult km_bind     (struct MenuDefinition *md, const char *key_str, int op, char *macro, char *desc, struct Buffer *err);
 char *             parse_keymap(const struct Command *cmd, struct MenuDefinitionArray *mda, struct Buffer *line, struct Buffer *err);
-void               parse_menu  (bool *menus, const char *s, struct Buffer *err);
+void               parse_menu  (struct MenuDefinitionArray *menus, const char *s, struct Buffer *err);
 
 enum CommandResult parse_bind  (const struct Command *cmd, struct Buffer *line, const struct ParseContext *pc, struct ParseError *pe);
 enum CommandResult parse_exec  (const struct Command *cmd, struct Buffer *line, const struct ParseContext *pc, struct ParseError *pe);

@@ -34,6 +34,9 @@ struct ConfigSubset;
 struct KeyEvent;
 struct MuttWindow;
 
+extern struct MenuDefinition *MdAlias;
+extern struct MenuDefinition *MdQuery;
+
 /**
  * @defgroup alias_function_api Alias Function API
  * @ingroup dispatcher_api

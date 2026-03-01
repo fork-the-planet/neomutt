@@ -76,6 +76,9 @@
 #include <libintl.h>
 #endif
 
+/// Index Menu Definition
+struct MenuDefinition *MdIndex = NULL;
+
 // clang-format off
 /**
  * OpIndex - Functions for the Index Menu
@@ -328,6 +331,8 @@ void index_init_keys(struct SubMenu *sm_generic)
   km_menu_add_submenu(md, sm_sidebar);
   km_menu_add_submenu(md, sm_generic);
   km_menu_add_bindings(md, IndexDefaultBindings);
+
+  MdIndex = md;
 }
 
 /**
@@ -2019,10 +2024,9 @@ static int op_mark_msg(struct IndexSharedData *shared,
       snprintf(macro, sizeof(macro), "<search>~i '%s'\n", buf_string(msg_id));
       buf_pool_release(&msg_id);
 
-      struct MenuDefinition *md = menu_find(MENU_INDEX);
       /* L10N: "message hotkey" is the key bindings menu description of a
          macro created by <mark-message>. */
-      km_bind(md, str, OP_MACRO, macro, _("message hotkey"), NULL);
+      km_bind(MdIndex, str, OP_MACRO, macro, _("message hotkey"), NULL);
 
       /* L10N: This is echoed after <mark-message> creates a new hotkey
          macro.  %s is the hotkey string ($mark_macro_prefix followed

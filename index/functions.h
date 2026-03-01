@@ -30,6 +30,8 @@ struct IndexSharedData;
 struct KeyEvent;
 struct MuttWindow;
 
+extern struct MenuDefinition *MdIndex;
+
 /**
  * @defgroup index_function_api Index Function API
  * @ingroup dispatcher_api

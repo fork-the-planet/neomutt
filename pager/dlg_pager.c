@@ -52,7 +52,6 @@
 #include "expando/lib.h"
 #include "index/lib.h"
 #include "key/lib.h"
-#include "menu/lib.h"
 #include "pattern/lib.h"
 #include "sidebar/lib.h"
 #include "display.h"
@@ -314,7 +313,7 @@ int dlg_pager(struct PagerView *pview)
   }
   //---------- setup help menu ------------------------------------------------
   pview->win_pager->help_data = pager_resolve_help_mapping(pview->mode, mailbox_type);
-  pview->win_pager->help_menu = MENU_PAGER;
+  pview->win_pager->help_md = MdPager;
 
   //---------- initialize redraw pdata  -----------------------------------------
   pview->win_pager->size = MUTT_WIN_SIZE_MAXIMISE;
@@ -484,7 +483,7 @@ int dlg_pager(struct PagerView *pview)
     // One of such functions is `mutt_enter_command()`
     // Some OP codes are not handled by pager, they cause pager to quit returning
     // OP code to index. Index handles the operation and then restarts pager
-    struct KeyEvent event = km_dokey(MENU_PAGER, GETCH_NO_FLAGS);
+    struct KeyEvent event = km_dokey(MdPager, GETCH_NO_FLAGS);
     op = event.op;
 
     // km_dokey() can block, so recheck the timer.
@@ -509,7 +508,7 @@ int dlg_pager(struct PagerView *pview)
 
     if (op == OP_NULL)
     {
-      km_error_key(MENU_PAGER);
+      km_error_key(MdPager);
       continue;
     }
 

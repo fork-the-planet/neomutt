@@ -50,6 +50,9 @@ struct ParseContext;
 struct ParseError;
 struct SubMenu;
 
+extern struct MenuDefinition *MdSidebar;
+extern struct SubMenu *SmSidebar;
+
 void sb_init   (void);
 void sb_cleanup(void);
 

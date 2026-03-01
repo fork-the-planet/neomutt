@@ -219,7 +219,8 @@ void simple_dialog_free(struct MuttWindow **ptr)
 {
 }
 
-struct SimpleDialogWindows simple_dialog_new(enum MenuType mtype, enum WindowType wtype,
+struct SimpleDialogWindows simple_dialog_new(const struct MenuDefinition *md,
+                                             enum WindowType wtype,
                                              const struct Mapping *help_data)
 {
   struct SimpleDialogWindows ret = { 0 };

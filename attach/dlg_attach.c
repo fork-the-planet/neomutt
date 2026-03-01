@@ -216,8 +216,7 @@ void dlg_attachment(struct ConfigSubset *sub, struct MailboxView *mv,
   mutt_parse_mime_message(e, fp);
   exec_message_hook(m, e, CMD_MESSAGE_HOOK);
 
-  struct SimpleDialogWindows sdw = simple_dialog_new(MENU_ATTACHMENT, WT_DLG_ATTACHMENT,
-                                                     AttachmentHelp);
+  struct SimpleDialogWindows sdw = simple_dialog_new(MdAttach, WT_DLG_ATTACHMENT, AttachmentHelp);
   struct Menu *menu = sdw.menu;
   menu->make_entry = attach_make_entry;
   menu->tag = attach_tag;
@@ -253,14 +252,14 @@ void dlg_attachment(struct ConfigSubset *sub, struct MailboxView *mv,
     menu_tagging_dispatcher(menu->win, &event);
     window_redraw(NULL);
 
-    event = km_dokey(MENU_ATTACHMENT, GETCH_NO_FLAGS);
+    event = km_dokey(MdAttach, GETCH_NO_FLAGS);
     op = event.op;
     mutt_debug(LL_DEBUG1, "Got op %s (%d)\n", opcodes_get_name(op), op);
     if (op < 0)
       continue;
     if (op == OP_NULL)
     {
-      km_error_key(MENU_ATTACHMENT);
+      km_error_key(MdAttach);
       continue;
     }
     mutt_clear_error();

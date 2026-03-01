@@ -24,14 +24,14 @@
 #define MUTT_MENU_PRIVATE_H
 
 #include <stddef.h>
-#include "type.h"
 
 struct ConfigSubset;
 struct Menu;
+struct MenuDefinition;
 struct MuttWindow;
 
 void         menu_free(struct Menu **ptr);
-struct Menu *menu_new(enum MenuType type, struct MuttWindow *win, struct ConfigSubset *sub);
+struct Menu *menu_new(const struct MenuDefinition *md, struct MuttWindow *win, struct ConfigSubset *sub);
 
 void menu_add_observers   (struct Menu *menu);
 

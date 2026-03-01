@@ -246,8 +246,7 @@ void dlg_autocrypt(void)
   if (mutt_autocrypt_init(false))
     return;
 
-  struct SimpleDialogWindows sdw = simple_dialog_new(MENU_AUTOCRYPT, WT_DLG_AUTOCRYPT,
-                                                     AutocryptHelp);
+  struct SimpleDialogWindows sdw = simple_dialog_new(MdAutocrypt, WT_DLG_AUTOCRYPT, AutocryptHelp);
 
   struct Menu *menu = sdw.menu;
 
@@ -277,14 +276,14 @@ void dlg_autocrypt(void)
     menu_tagging_dispatcher(menu->win, &event);
     window_redraw(NULL);
 
-    event = km_dokey(MENU_AUTOCRYPT, GETCH_NO_FLAGS);
+    event = km_dokey(MdAutocrypt, GETCH_NO_FLAGS);
     op = event.op;
     mutt_debug(LL_DEBUG1, "Got op %s (%d)\n", opcodes_get_name(op), op);
     if (op < 0)
       continue;
     if (op == OP_NULL)
     {
-      km_error_key(MENU_AUTOCRYPT);
+      km_error_key(MdAutocrypt);
       continue;
     }
     mutt_clear_error();

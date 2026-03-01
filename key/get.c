@@ -280,11 +280,14 @@ struct KeyEvent mutt_getch(GetChFlags flags)
 
 /**
  * km_error_key - Handle an unbound key sequence
- * @param mtype Menu type, e.g. #MENU_PAGER
+ * @param md Menu Definition
  */
-void km_error_key(enum MenuType mtype)
+void km_error_key(const struct MenuDefinition *md)
 {
-  struct Keymap *key = km_find_func(mtype, OP_HELP);
+  if (!md)
+    return;
+
+  struct Keymap *key = km_find_func(md, OP_HELP);
   if (!key)
   {
     mutt_error(_("Key is not bound"));
@@ -424,22 +427,18 @@ KeyGatherFlags gather_functions(const struct MenuDefinition *md, const keycode_t
 
 /**
  * km_dokey - Determine what a keypress should do
- * @param mtype Menu type, e.g. #MENU_EDITOR
+ * @param md    Menu Definition
  * @param flags Flags, e.g. #GETCH_IGNORE_MACRO
  * @retval ptr Event
  */
-struct KeyEvent km_dokey(enum MenuType mtype, GetChFlags flags)
+struct KeyEvent km_dokey(const struct MenuDefinition *md, GetChFlags flags)
 {
   struct KeyEvent event = { 0, OP_NULL };
   int pos = 0;
-  const struct MenuDefinition *md = NULL;
   keycode_t keys[MAX_SEQ] = { 0 };
 
-  ARRAY_FOREACH(md, &MenuDefs)
-  {
-    if (md->id == mtype)
-      break;
-  }
+  if (!md)
+    return event;
 
   for (int n = 0; n < MaxKeyLoop; n++)
   {

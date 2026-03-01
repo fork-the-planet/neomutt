@@ -31,6 +31,8 @@ struct MuttWindow;
 struct PagerPrivateData;
 struct PagerView;
 
+extern struct MenuDefinition *MdPager;
+
 /**
  * @defgroup pager_function_api Pager Function API
  * @ingroup dispatcher_api

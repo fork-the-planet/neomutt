@@ -33,6 +33,12 @@
 #include "menu/lib.h"
 #include "ncrypt/lib.h"
 
+/// Pgp Menu Definition
+struct MenuDefinition *MdPgp = NULL;
+
+/// Smime Menu Definition
+struct MenuDefinition *MdSmime = NULL;
+
 // clang-format off
 /**
  * OpPgp - Functions for the Pgp Menu
@@ -93,9 +99,13 @@ void pgp_init_keys(struct SubMenu *sm_generic)
   km_menu_add_submenu(md, sm_generic);
   km_menu_add_bindings(md, PgpDefaultBindings);
 
+  MdPgp = md;
+
   sm = km_register_submenu(OpSmime);
   md = km_register_menu(MENU_SMIME, "smime");
   km_menu_add_submenu(md, sm);
   km_menu_add_submenu(md, sm_generic);
   km_menu_add_bindings(md, SmimeDefaultBindings);
+
+  MdSmime = md;
 }

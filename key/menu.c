@@ -51,7 +51,7 @@
 enum CommandResult km_bind(struct MenuDefinition *md, const char *key_str,
                            int op, char *macro, char *desc, struct Buffer *err)
 {
-  if (!md)
+  if (!md || ARRAY_EMPTY(&md->submenus))
     return MUTT_CMD_ERROR;
 
   enum CommandResult rc = MUTT_CMD_SUCCESS;
@@ -132,24 +132,17 @@ enum CommandResult km_bind(struct MenuDefinition *md, const char *key_str,
     }
   }
 
-  if (map->op == OP_NULL)
+  if (last) /* if queue has at least one entry */
   {
-    keymap_free(&map);
+    if (STAILQ_NEXT(last, entries))
+      STAILQ_INSERT_AFTER(kml, last, map, entries);
+    else /* last entry in the queue */
+      STAILQ_INSERT_TAIL(kml, map, entries);
+    last->eq = lastpos;
   }
-  else
+  else /* queue is empty, so insert from head */
   {
-    if (last) /* if queue has at least one entry */
-    {
-      if (STAILQ_NEXT(last, entries))
-        STAILQ_INSERT_AFTER(kml, last, map, entries);
-      else /* last entry in the queue */
-        STAILQ_INSERT_TAIL(kml, map, entries);
-      last->eq = lastpos;
-    }
-    else /* queue is empty, so insert from head */
-    {
-      STAILQ_INSERT_HEAD(kml, map, entries);
-    }
+    STAILQ_INSERT_HEAD(kml, map, entries);
   }
 
   return rc;
@@ -157,18 +150,14 @@ enum CommandResult km_bind(struct MenuDefinition *md, const char *key_str,
 
 /**
  * km_find_func - Find a function's mapping in a Menu
- * @param mtype Menu type, e.g. #MENU_PAGER
+ * @param md    Menu Definition
  * @param func  Function, e.g. OP_DELETE
  * @retval ptr Keymap for the function
  */
-struct Keymap *km_find_func(enum MenuType mtype, int func)
+struct Keymap *km_find_func(const struct MenuDefinition *md, int func)
 {
-  struct MenuDefinition *md = NULL;
-  ARRAY_FOREACH(md, &MenuDefs)
-  {
-    if (md->id == mtype)
-      break;
-  }
+  if (!md)
+    return NULL;
 
   struct SubMenu **smp = NULL;
 
@@ -185,40 +174,6 @@ struct Keymap *km_find_func(enum MenuType mtype, int func)
   }
 
   return NULL;
-}
-
-/**
- * km_get_menu_name - Get the name of a Menu
- * @param mtype Menu Type
- * @retval str Menu name, e.g. "index"
- */
-const char *km_get_menu_name(int mtype)
-{
-  struct MenuDefinition *md = NULL;
-  ARRAY_FOREACH(md, &MenuDefs)
-  {
-    if (md->id == mtype)
-      return md->name;
-  }
-
-  return "UNKNOWN";
-}
-
-/**
- * km_get_menu_id - Get the ID of a Menu
- * @param name Menu name, e.g. "index"
- * @retval num Menu ID, e.g. #MENU_INDEX
- */
-int km_get_menu_id(const char *name)
-{
-  struct MenuDefinition *md = NULL;
-  ARRAY_FOREACH(md, &MenuDefs)
-  {
-    if (mutt_str_equal(md->name, name))
-      return md->id;
-  }
-
-  return -1;
 }
 
 /**
@@ -290,6 +245,26 @@ struct MenuDefinition *menu_find(int menu)
   ARRAY_FOREACH(md, &MenuDefs)
   {
     if (md->id == menu)
+      return md;
+  }
+
+  return NULL;
+}
+
+/**
+ * menu_find_by_name - Find a Menu Definition by its name
+ * @param name Menu name, e.g. "index"
+ * @retval ptr Menu Definition
+ */
+struct MenuDefinition *menu_find_by_name(const char *name)
+{
+  if (!name)
+    return NULL;
+
+  struct MenuDefinition *md = NULL;
+  ARRAY_FOREACH(md, &MenuDefs)
+  {
+    if (mutt_str_equal(md->name, name))
       return md;
   }
 

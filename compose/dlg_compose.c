@@ -383,7 +383,7 @@ static struct MuttWindow *compose_dlg_init(struct ConfigSubset *sub,
   shared->win_attach_bar = win_abar;
 
   dlg->help_data = ComposeHelp;
-  dlg->help_menu = MENU_COMPOSE;
+  dlg->help_md = MdCompose;
 
   return dlg;
 }
@@ -420,7 +420,7 @@ int dlg_compose(struct Email *e, struct Buffer *fcc, uint8_t flags, struct Confi
     dlg->help_data = ComposeNewsHelp;
   else
     dlg->help_data = ComposeHelp;
-  dlg->help_menu = MENU_COMPOSE;
+  dlg->help_md = MdCompose;
 
   struct Menu *menu = shared->adata->menu;
   update_menu(shared->adata->actx, menu, true);
@@ -441,14 +441,14 @@ int dlg_compose(struct Email *e, struct Buffer *fcc, uint8_t flags, struct Confi
     menu_tagging_dispatcher(menu->win, &event);
     window_redraw(NULL);
 
-    event = km_dokey(MENU_COMPOSE, GETCH_NO_FLAGS);
+    event = km_dokey(MdCompose, GETCH_NO_FLAGS);
     op = event.op;
     mutt_debug(LL_DEBUG1, "Got op %s (%d)\n", opcodes_get_name(op), op);
     if (op < 0)
       continue;
     if (op == OP_NULL)
     {
-      km_error_key(MENU_COMPOSE);
+      km_error_key(MdCompose);
       continue;
     }
     mutt_clear_error();

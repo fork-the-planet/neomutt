@@ -25,4 +25,7 @@
 
 struct SubMenu *generic_init_keys(void);
 
+extern struct MenuDefinition *MdGeneric;
+extern struct MenuDefinition *MdDialog;
+
 #endif /* MUTT_FUNCTIONS_H */

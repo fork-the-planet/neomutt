@@ -92,17 +92,17 @@ static const char *ToCharsDesc[] = {
 
 /**
  * dump_message_flags - Write out all the message flags
- * @param menu Menu type
- * @param fp   File to write to
+ * @param md Menu Definition
+ * @param fp File to write to
  *
  * Display a quick reminder of all the flags in the config options:
  * - $crypt_chars
  * - $flag_chars
  * - $to_chars
  */
-static void dump_message_flags(enum MenuType menu, FILE *fp)
+static void dump_message_flags(const struct MenuDefinition *md, FILE *fp)
 {
-  if (menu != MENU_INDEX)
+  if (md != MdIndex)
     return;
 
   const char *flag = NULL;
@@ -142,9 +142,9 @@ static void dump_message_flags(enum MenuType menu, FILE *fp)
 
 /**
  * mutt_help - Display the Help Page
- * @param menu Menu type
+ * @param md Menu Definition
  */
-void mutt_help(enum MenuType menu)
+void mutt_help(const struct MenuDefinition *md)
 {
   struct BindingInfoArray bia_bind = ARRAY_HEAD_INITIALIZER;
   struct BindingInfoArray bia_macro = ARRAY_HEAD_INITIALIZER;
@@ -156,7 +156,7 @@ void mutt_help(enum MenuType menu)
   // ---------------------------------------------------------------------------
   // Gather the data
 
-  gather_menu(menu, &bia_bind, &bia_macro, false);
+  gather_menu(md, &bia_bind, &bia_macro, false);
 
   ARRAY_SORT(&bia_bind, binding_sort, NULL);
   ARRAY_SORT(&bia_macro, binding_sort, NULL);
@@ -166,7 +166,7 @@ void mutt_help(enum MenuType menu)
 
   const int wm0 = measure_column(&bia_macro, 0);
 
-  gather_unbound(menu, &bia_unbound);
+  gather_unbound(md, &bia_unbound);
 
   ARRAY_SORT(&bia_unbound, binding_sort, NULL);
   const int wu1 = measure_column(&bia_unbound, 1);
@@ -247,7 +247,7 @@ void mutt_help(enum MenuType menu)
     fprintf(fp, "%*s  %s\n", -wu1, bi->a[1], bi->a[2]);
   }
 
-  dump_message_flags(menu, fp);
+  dump_message_flags(md, fp);
   mutt_file_fclose(&fp);
 
   // ---------------------------------------------------------------------------
@@ -260,8 +260,7 @@ void mutt_help(enum MenuType menu)
   pview.flags = MUTT_PAGER_MARKER | MUTT_PAGER_NOWRAP | MUTT_PAGER_STRIPES;
 
   banner = buf_pool_get();
-  menu_name = km_get_menu_name(menu);
-  buf_printf(banner, _("Help for %s"), menu_name);
+  buf_printf(banner, _("Help for %s"), md->name);
   pdata.fname = buf_string(tempfile);
   pview.banner = buf_string(banner);
   mutt_do_pager(&pview, NULL);

@@ -47,6 +47,11 @@
 #include "gui.h"
 #include "sort.h"
 
+/// Alias Menu Definition
+struct MenuDefinition *MdAlias = NULL;
+/// Query Menu Definition
+struct MenuDefinition *MdQuery = NULL;
+
 // clang-format off
 /**
  * OpAlias - Functions for the Alias Menu
@@ -131,11 +136,15 @@ void alias_init_keys(struct SubMenu *sm_generic)
   km_menu_add_submenu(md, sm_generic);
   km_menu_add_bindings(md, AliasDefaultBindings);
 
+  MdAlias = md;
+
   sm = km_register_submenu(OpQuery);
   md = km_register_menu(MENU_QUERY, "query");
   km_menu_add_submenu(md, sm);
   km_menu_add_submenu(md, sm_generic);
   km_menu_add_bindings(md, QueryDefaultBindings);
+
+  MdQuery = md;
 }
 
 /**

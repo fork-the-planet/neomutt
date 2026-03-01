@@ -208,8 +208,7 @@ static const struct AttrColor *post_color(struct Menu *menu, int line)
  */
 struct Email *dlg_postponed(struct Mailbox *m)
 {
-  struct SimpleDialogWindows sdw = simple_dialog_new(MENU_POSTPONED, WT_DLG_POSTPONED,
-                                                     PostponedHelp);
+  struct SimpleDialogWindows sdw = simple_dialog_new(MdPostpone, WT_DLG_POSTPONED, PostponedHelp);
   // Required to number the emails
   struct MailboxView *mv = mview_new(m, NeoMutt->notify);
 
@@ -244,14 +243,14 @@ struct Email *dlg_postponed(struct Mailbox *m)
     menu_tagging_dispatcher(menu->win, &event);
     window_redraw(NULL);
 
-    event = km_dokey(MENU_POSTPONED, GETCH_NO_FLAGS);
+    event = km_dokey(MdPostpone, GETCH_NO_FLAGS);
     op = event.op;
     mutt_debug(LL_DEBUG1, "Got op %s (%d)\n", opcodes_get_name(op), op);
     if (op < 0)
       continue;
     if (op == OP_NULL)
     {
-      km_error_key(MENU_POSTPONED);
+      km_error_key(MdPostpone);
       continue;
     }
     mutt_clear_error();

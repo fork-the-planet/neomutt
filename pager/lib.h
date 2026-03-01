@@ -48,6 +48,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include "mutt/lib.h"
+#include "functions.h" // IWYU pragma: keep
 
 struct Email;
 struct IndexSharedData;

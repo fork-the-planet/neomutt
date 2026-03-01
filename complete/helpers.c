@@ -293,7 +293,7 @@ int mutt_command_complete(struct CompletionData *cd, struct Buffer *buf,
         if (win && win->wdata)
         {
           struct Menu *menu = win->wdata;
-          mtype = menu->type;
+          mtype = menu->md->id;
         }
       }
       else
@@ -301,7 +301,8 @@ int mutt_command_complete(struct CompletionData *cd, struct Buffer *buf,
         mtype = menu_get_current_type();
       }
 
-      struct StringArray fna = km_get_func_array(mtype);
+      const struct MenuDefinition *md = menu_find(mtype);
+      struct StringArray fna = km_get_func_array(md);
 
       ARRAY_SORT(&fna, complete_sort_strings, NULL);
       const char **strp = NULL;

@@ -28,6 +28,8 @@
 struct KeyEvent;
 struct MuttWindow;
 
+extern struct MenuDefinition *MdPgp;
+
 /**
  * struct PgpData - Data to pass to the Pgp Functions
  */

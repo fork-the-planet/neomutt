@@ -23,10 +23,10 @@
 #ifndef MUTT_GUI_SIMPLE_H
 #define MUTT_GUI_SIMPLE_H
 
-#include "menu/lib.h"
 #include "mutt_window.h"
 
 struct Mapping;
+struct MenuDefinition;
 
 /**
  * SimpleDialogWindows - Tuple for the results of simple_dialog_new()
@@ -38,7 +38,7 @@ struct SimpleDialogWindows
   struct Menu       *menu;     ///< Menu
 };
 
-struct SimpleDialogWindows simple_dialog_new(enum MenuType mtype, enum WindowType wtype, const struct Mapping *help_data);
+struct SimpleDialogWindows simple_dialog_new(const struct MenuDefinition *md, enum WindowType wtype, const struct Mapping *help_data);
 void                       simple_dialog_free(struct MuttWindow **ptr);
 
 #endif /* MUTT_GUI_SIMPLE_H */

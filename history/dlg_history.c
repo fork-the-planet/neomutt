@@ -118,7 +118,7 @@ static int history_make_entry(struct Menu *menu, int line, int max_cols, struct 
  */
 void dlg_history(struct Buffer *buf, struct StringArray *matches)
 {
-  struct SimpleDialogWindows sdw = simple_dialog_new(MENU_DIALOG, WT_DLG_HISTORY, HistoryHelp);
+  struct SimpleDialogWindows sdw = simple_dialog_new(MdDialog, WT_DLG_HISTORY, HistoryHelp);
   struct Menu *menu = sdw.menu;
 
   struct HistoryData hd = { false, false, buf, menu, matches };
@@ -142,14 +142,14 @@ void dlg_history(struct Buffer *buf, struct StringArray *matches)
     menu_tagging_dispatcher(menu->win, &event);
     window_redraw(NULL);
 
-    event = km_dokey(MENU_DIALOG, GETCH_NO_FLAGS);
+    event = km_dokey(MdDialog, GETCH_NO_FLAGS);
     op = event.op;
     mutt_debug(LL_DEBUG1, "Got op %s (%d)\n", opcodes_get_name(op), op);
     if (op < 0)
       continue;
     if (op == OP_NULL)
     {
-      km_error_key(MENU_GENERIC);
+      km_error_key(MdGeneric);
       continue;
     }
     mutt_clear_error();

@@ -37,7 +37,6 @@
 #include "complete/lib.h"
 #include "history/lib.h"
 #include "key/lib.h"
-#include "menu/lib.h"
 #include "functions.h"
 #include "muttlib.h"
 #include "state.h"
@@ -283,7 +282,7 @@ int mw_get_field(const char *prompt, struct Buffer *buf, CompletionFlags complet
   struct EnterState *es = enter_state_new();
 
   win->help_data = EditorHelp;
-  win->help_menu = MENU_EDITOR;
+  win->help_md = MdEditor;
 
   msgcont_push_window(win);
   struct MuttWindow *old_focus = window_set_focus(win);
@@ -325,7 +324,7 @@ int mw_get_field(const char *prompt, struct Buffer *buf, CompletionFlags complet
         win->actions |= WA_REPAINT;
 
       window_redraw(NULL);
-      struct KeyEvent event = km_dokey(MENU_EDITOR, flags);
+      struct KeyEvent event = km_dokey(MdEditor, flags);
       if ((event.op == OP_TIMEOUT) || (event.op == OP_REPAINT))
       {
         continue;

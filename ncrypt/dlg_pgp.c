@@ -224,7 +224,7 @@ struct PgpKeyInfo *dlg_pgp(struct PgpKeyInfo *keys, struct Address *p, const cha
 
   pgp_sort_keys(&pua);
 
-  struct SimpleDialogWindows sdw = simple_dialog_new(MENU_PGP, WT_DLG_PGP, PgpHelp);
+  struct SimpleDialogWindows sdw = simple_dialog_new(MdPgp, WT_DLG_PGP, PgpHelp);
   menu = sdw.menu;
   struct PgpData pd = { false, menu, &pua, NULL };
 
@@ -256,14 +256,14 @@ struct PgpKeyInfo *dlg_pgp(struct PgpKeyInfo *keys, struct Address *p, const cha
     menu_tagging_dispatcher(menu->win, &event);
     window_redraw(NULL);
 
-    event = km_dokey(MENU_PGP, GETCH_NO_FLAGS);
+    event = km_dokey(MdPgp, GETCH_NO_FLAGS);
     op = event.op;
     mutt_debug(LL_DEBUG1, "Got op %s (%d)\n", opcodes_get_name(op), op);
     if (op < 0)
       continue;
     if (op == OP_NULL)
     {
-      km_error_key(MENU_PGP);
+      km_error_key(MdPgp);
       continue;
     }
     mutt_clear_error();

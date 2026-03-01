@@ -27,7 +27,7 @@
  * helpful key bindings for the current screen.
  *
  * Windows can declare what should be displayed, when they have focus, by setting:
- * - MuttWindow::help_menu, e.g. #MENU_PAGER
+ * - MuttWindow::help_md, Menu Definition
  * - MuttWindow::help_data, a Mapping of names to opcodes, e.g. #PagerNormalHelp
  *
  * The Help Bar looks up which bindings correspond to the function names.
@@ -74,11 +74,10 @@
 #include "lib.h"
 #include "color/lib.h"
 #include "key/lib.h"
-#include "menu/lib.h"
 
 /**
  * make_help - Create one entry for the Help Bar
- * @param[in]  menu Current Menu, e.g. #MENU_PAGER
+ * @param[in]  md   Current Menu Definition
  * @param[in]  op   Operation, e.g. OP_DELETE
  * @param[in]  txt  Text part, e.g. "delete"
  * @param[out] buf  Buffer for the result
@@ -86,9 +85,10 @@
  *
  * This will return something like: "d:delete"
  */
-static bool make_help(enum MenuType menu, int op, const char *txt, struct Buffer *buf)
+static bool make_help(const struct MenuDefinition *md, int op, const char *txt,
+                      struct Buffer *buf)
 {
-  if (keymap_expand_key(km_find_func(menu, op), buf))
+  if (keymap_expand_key(km_find_func(md, op), buf))
   {
     buf_addch(buf, ':');
     buf_addstr(buf, txt);
@@ -100,15 +100,16 @@ static bool make_help(enum MenuType menu, int op, const char *txt, struct Buffer
 
 /**
  * compile_help - Create the text for the help menu
- * @param[in]  menu   Current Menu, e.g. #MENU_PAGER
+ * @param[in]  md     Menu Definition
  * @param[in]  items  Map of functions to display in the Help Bar
  * @param[out] buf    Buffer for the result
  */
-static void compile_help(enum MenuType menu, const struct Mapping *items, struct Buffer *buf)
+static void compile_help(const struct MenuDefinition *md,
+                         const struct Mapping *items, struct Buffer *buf)
 {
   for (int i = 0; items[i].name; i++)
   {
-    if (!make_help(menu, items[i].value, _(items[i].name), buf))
+    if (!make_help(md, items[i].value, _(items[i].name), buf))
       continue;
 
     buf_addstr(buf, "  ");
@@ -141,9 +142,9 @@ static int helpbar_recalc(struct MuttWindow *win)
     return 0;
 
   struct Buffer *helpstr = buf_pool_get();
-  compile_help(win_focus->help_menu, win_focus->help_data, helpstr);
+  compile_help(win_focus->help_md, win_focus->help_data, helpstr);
 
-  wdata->help_menu = win_focus->help_menu;
+  wdata->help_md = win_focus->help_md;
   wdata->help_data = win_focus->help_data;
   wdata->help_str = buf_strdup(helpstr);
   buf_pool_release(&helpstr);
@@ -195,7 +196,7 @@ static int helpbar_binding_observer(struct NotifyCallback *nc)
     return 0;
 
   struct EventBinding *ev_b = nc->event_data;
-  if (wdata->help_menu != ev_b->menu)
+  if (wdata->help_md && (wdata->help_md != ev_b->menu))
     return 0;
 
   win_helpbar->actions |= WA_RECALC;

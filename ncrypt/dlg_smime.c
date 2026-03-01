@@ -200,7 +200,7 @@ struct SmimeKey *dlg_smime(struct SmimeKey *keys, const char *query)
   }
   /* sorting keys might be done later - TODO */
 
-  struct SimpleDialogWindows sdw = simple_dialog_new(MENU_SMIME, WT_DLG_SMIME, SmimeHelp);
+  struct SimpleDialogWindows sdw = simple_dialog_new(MdSmime, WT_DLG_SMIME, SmimeHelp);
   struct Menu *menu = sdw.menu;
 
   struct SmimeData sd = { false, menu, &ska, NULL };
@@ -226,14 +226,14 @@ struct SmimeKey *dlg_smime(struct SmimeKey *keys, const char *query)
     menu_tagging_dispatcher(menu->win, &event);
     window_redraw(NULL);
 
-    event = km_dokey(MENU_SMIME, GETCH_NO_FLAGS);
+    event = km_dokey(MdSmime, GETCH_NO_FLAGS);
     op = event.op;
     mutt_debug(LL_DEBUG1, "Got op %s (%d)\n", opcodes_get_name(op), op);
     if (op < 0)
       continue;
     if (op == OP_NULL)
     {
-      km_error_key(MENU_SMIME);
+      km_error_key(MdSmime);
       continue;
     }
     mutt_clear_error();

@@ -23,16 +23,16 @@
 #ifndef MUTT_KEY_NOTIFY_H
 #define MUTT_KEY_NOTIFY_H
 
-#include "menu/lib.h"
+struct MenuDefinition;
 
 /**
  * struct EventBinding - A key binding Event
  */
 struct EventBinding
 {
-  enum MenuType menu; ///< Menu, e.g. #MENU_PAGER
-  const char *key;    ///< Key string being bound (for new bind/macro)
-  int op;             ///< Operation the key's bound to (for bind), e.g. OP_DELETE
+  const struct MenuDefinition *menu;   ///< Menu Definition
+  const char *key;                     ///< Key string being bound (for new bind/macro)
+  int op;                              ///< Operation the key's bound to (for bind), e.g. OP_DELETE
 };
 
 /**

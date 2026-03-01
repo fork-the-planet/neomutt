@@ -231,7 +231,7 @@ static int alias_window_observer(struct NotifyCallback *nc)
  */
 static struct SimpleDialogWindows alias_dialog_new(struct AliasMenuData *mdata)
 {
-  struct SimpleDialogWindows sdw = simple_dialog_new(MENU_ALIAS, WT_DLG_ALIAS, AliasHelp);
+  struct SimpleDialogWindows sdw = simple_dialog_new(MdAlias, WT_DLG_ALIAS, AliasHelp);
 
   struct Menu *menu = sdw.menu;
 
@@ -298,14 +298,14 @@ static bool dlg_alias(struct AliasMenuData *mdata)
     menu_tagging_dispatcher(menu->win, &event);
     window_redraw(NULL);
 
-    event = km_dokey(MENU_ALIAS, GETCH_NO_FLAGS);
+    event = km_dokey(MdAlias, GETCH_NO_FLAGS);
     op = event.op;
     mutt_debug(LL_DEBUG1, "Got op %s (%d)\n", opcodes_get_name(op), op);
     if (op < 0)
       continue;
     if (op == OP_NULL)
     {
-      km_error_key(MENU_ALIAS);
+      km_error_key(MdAlias);
       continue;
     }
     mutt_clear_error();

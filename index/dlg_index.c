@@ -1115,7 +1115,7 @@ struct Mailbox *dlg_index(struct MuttWindow *dlg, struct Mailbox *m_init)
     dlg->help_data = IndexNewsHelp;
   else
     dlg->help_data = IndexHelp;
-  dlg->help_menu = MENU_INDEX;
+  dlg->help_md = MdIndex;
 
   priv->menu = priv->win_index->wdata;
   priv->menu->make_entry = index_make_entry;
@@ -1297,7 +1297,7 @@ struct Mailbox *dlg_index(struct MuttWindow *dlg, struct Mailbox *m_init)
     mutt_refresh();
 
     window_redraw(NULL);
-    struct KeyEvent event = km_dokey(MENU_INDEX, GETCH_NO_FLAGS);
+    struct KeyEvent event = km_dokey(MdIndex, GETCH_NO_FLAGS);
     op = event.op;
 
     if (op == OP_REPAINT)
@@ -1382,7 +1382,7 @@ struct Mailbox *dlg_index(struct MuttWindow *dlg, struct Mailbox *m_init)
       rc = global_function_dispatcher(priv->menu->win, &event);
 
     if (rc == FR_UNKNOWN)
-      km_error_key(MENU_INDEX);
+      km_error_key(MdIndex);
 
 #ifdef USE_NOTMUCH
     nm_db_debug_check(shared->mailbox);

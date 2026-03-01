@@ -28,6 +28,8 @@
 struct KeyEvent;
 struct MuttWindow;
 
+extern struct MenuDefinition *MdPostpone;
+
 /**
  * struct PostponeData - Data to pass to the Postpone Functions
  */

@@ -51,6 +51,9 @@
 static const char *Function_not_permitted_in_attach_message_mode = N_(
     "Function not permitted in attach-message mode");
 
+/// Attach Menu Definition
+struct MenuDefinition *MdAttach = NULL;
+
 // clang-format off
 /**
  * OpAttachment - Functions for the Attachment Menu
@@ -132,6 +135,8 @@ void attach_init_keys(struct SubMenu *sm_generic)
   km_menu_add_submenu(md, sm);
   km_menu_add_submenu(md, sm_generic);
   km_menu_add_bindings(md, AttachmentDefaultBindings);
+
+  MdAttach = md;
 }
 
 /**

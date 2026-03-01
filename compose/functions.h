@@ -27,6 +27,8 @@ struct ComposeSharedData;
 struct KeyEvent;
 struct MuttWindow;
 
+extern struct MenuDefinition *MdCompose;
+
 /**
  * @defgroup compose_function_api Compose Function API
  * @ingroup dispatcher_api

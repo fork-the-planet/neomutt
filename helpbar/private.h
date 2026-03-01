@@ -32,9 +32,9 @@ struct MuttWindow;
  */
 struct HelpbarWindowData
 {
-  int                   help_menu; ///< Menu for key bindings, e.g. #MENU_PAGER
-  const struct Mapping *help_data; ///< Data for the Help Bar
-  char *                help_str;  ///< Formatted Help Bar string
+  const struct MenuDefinition *help_md;    ///< Menu Definition for key bindings
+  const struct Mapping *       help_data;  ///< Data for the Help Bar
+  char *                       help_str;   ///< Formatted Help Bar string
 };
 
 void                      helpbar_wdata_free(struct MuttWindow *win, void **ptr);
